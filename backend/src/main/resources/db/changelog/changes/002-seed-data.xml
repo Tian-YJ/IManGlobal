@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="seed-001-permissions" author="iman">
+        <insert tableName="permissions">
+            <column name="id" value="11111111-1111-1111-1111-111111111001"/>
+            <column name="code" value="dashboard.view"/>
+            <column name="name" value="View Dashboard"/>
+            <column name="module" value="dashboard"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="permissions">
+            <column name="id" value="11111111-1111-1111-1111-111111111002"/>
+            <column name="code" value="business_plans.manage"/>
+            <column name="name" value="Manage Business Plans"/>
+            <column name="module" value="business_plans"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="permissions">
+            <column name="id" value="11111111-1111-1111-1111-111111111003"/>
+            <column name="code" value="portfolio.manage"/>
+            <column name="name" value="Manage Portfolio"/>
+            <column name="module" value="portfolio"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="permissions">
+            <column name="id" value="11111111-1111-1111-1111-111111111004"/>
+            <column name="code" value="jobs.manage"/>
+            <column name="name" value="Manage Jobs"/>
+            <column name="module" value="jobs"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="permissions">
+            <column name="id" value="11111111-1111-1111-1111-111111111005"/>
+            <column name="code" value="applicants.manage"/>
+            <column name="name" value="Manage Applicants"/>
+            <column name="module" value="applicants"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="permissions">
+            <column name="id" value="11111111-1111-1111-1111-111111111006"/>
+            <column name="code" value="cms.manage"/>
+            <column name="name" value="Manage CMS"/>
+            <column name="module" value="cms"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="permissions">
+            <column name="id" value="11111111-1111-1111-1111-111111111007"/>
+            <column name="code" value="media.manage"/>
+            <column name="name" value="Manage Media"/>
+            <column name="module" value="media"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="permissions">
+            <column name="id" value="11111111-1111-1111-1111-111111111008"/>
+            <column name="code" value="users.manage"/>
+            <column name="name" value="Manage Users"/>
+            <column name="module" value="users"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="permissions">
+            <column name="id" value="11111111-1111-1111-1111-111111111009"/>
+            <column name="code" value="roles.manage"/>
+            <column name="name" value="Manage Roles"/>
+            <column name="module" value="roles"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="permissions">
+            <column name="id" value="11111111-1111-1111-1111-111111111010"/>
+            <column name="code" value="audit.view"/>
+            <column name="name" value="View Audit Logs"/>
+            <column name="module" value="audit"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="permissions">
+            <column name="id" value="11111111-1111-1111-1111-111111111011"/>
+            <column name="code" value="settings.manage"/>
+            <column name="name" value="Manage Settings"/>
+            <column name="module" value="settings"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="seed-002-roles" author="iman">
+        <insert tableName="roles">
+            <column name="id" value="22222222-2222-2222-2222-222222222001"/>
+            <column name="name" value="SUPER_ADMIN"/>
+            <column name="description" value="Full system access"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" value="22222222-2222-2222-2222-222222222002"/>
+            <column name="name" value="ADMIN"/>
+            <column name="description" value="Administrative access"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" value="22222222-2222-2222-2222-222222222003"/>
+            <column name="name" value="REVIEWER"/>
+            <column name="description" value="Business plan reviewer"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" value="22222222-2222-2222-2222-222222222004"/>
+            <column name="name" value="HR"/>
+            <column name="description" value="HR and recruitment"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <sql>
+            INSERT INTO role_permissions (role_id, permission_id)
+            SELECT '22222222-2222-2222-2222-222222222001', id FROM permissions;
+            INSERT INTO role_permissions (role_id, permission_id)
+            SELECT '22222222-2222-2222-2222-222222222002', id FROM permissions
+            WHERE code NOT IN ('roles.manage');
+            INSERT INTO role_permissions (role_id, permission_id)
+            SELECT '22222222-2222-2222-2222-222222222003', id FROM permissions
+            WHERE code IN ('dashboard.view', 'business_plans.manage');
+            INSERT INTO role_permissions (role_id, permission_id)
+            SELECT '22222222-2222-2222-2222-222222222004', id FROM permissions
+            WHERE code IN ('dashboard.view', 'jobs.manage', 'applicants.manage');
+        </sql>
+    </changeSet>
+
+    <changeSet id="seed-004-portfolio" author="iman">
+        <insert tableName="portfolio_companies">
+            <column name="id" value="44444444-4444-4444-4444-444444444001"/>
+            <column name="name" value="NeuralFlow AI"/>
+            <column name="industry" value="Enterprise AI"/>
+            <column name="description" value="Enterprise AI platform for intelligent automation"/>
+            <column name="is_featured" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="portfolio_companies">
+            <column name="id" value="44444444-4444-4444-4444-444444444002"/>
+            <column name="name" value="HealthBridge"/>
+            <column name="industry" value="Healthcare"/>
+            <column name="description" value="Digital health platform connecting patients and providers"/>
+            <column name="is_featured" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="2"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="portfolio_companies">
+            <column name="id" value="44444444-4444-4444-4444-444444444003"/>
+            <column name="name" value="PayStream"/>
+            <column name="industry" value="Fintech"/>
+            <column name="description" value="Next-generation payment infrastructure"/>
+            <column name="is_featured" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="3"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="portfolio_companies">
+            <column name="id" value="44444444-4444-4444-4444-444444444004"/>
+            <column name="name" value="GreenGrid"/>
+            <column name="industry" value="Sustainability"/>
+            <column name="description" value="Clean energy management solutions"/>
+            <column name="is_featured" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="4"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="portfolio_companies">
+            <column name="id" value="44444444-4444-4444-4444-444444444005"/>
+            <column name="name" value="CloudScale"/>
+            <column name="industry" value="Enterprise"/>
+            <column name="description" value="Cloud infrastructure optimization"/>
+            <column name="is_featured" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="5"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="portfolio_companies">
+            <column name="id" value="44444444-4444-4444-4444-444444444006"/>
+            <column name="name" value="RetailNext"/>
+            <column name="industry" value="Consumer"/>
+            <column name="description" value="Omnichannel retail experience platform"/>
+            <column name="is_featured" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="6"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="seed-005-team" author="iman">
+        <insert tableName="team_members">
+            <column name="id" value="55555555-5555-5555-5555-555555555001"/>
+            <column name="full_name" value="David Chen"/>
+            <column name="role" value="Managing Partner"/>
+            <column name="bio" value="20+ years in venture capital across Asia Pacific"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="team_members">
+            <column name="id" value="55555555-5555-5555-5555-555555555002"/>
+            <column name="full_name" value="Sarah Wong"/>
+            <column name="role" value="Partner"/>
+            <column name="bio" value="Former operator turned investor focused on fintech"/>
+            <column name="display_order" valueNumeric="2"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="team_members">
+            <column name="id" value="55555555-5555-5555-5555-555555555003"/>
+            <column name="full_name" value="Michael Liu"/>
+            <column name="role" value="Principal"/>
+            <column name="bio" value="Deep expertise in enterprise software and AI"/>
+            <column name="display_order" valueNumeric="3"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="team_members">
+            <column name="id" value="55555555-5555-5555-5555-555555555004"/>
+            <column name="full_name" value="Emily Zhang"/>
+            <column name="role" value="Investment Associate"/>
+            <column name="bio" value="Healthcare and biotech investment specialist"/>
+            <column name="display_order" valueNumeric="4"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="seed-006-jobs" author="iman">
+        <insert tableName="jobs">
+            <column name="id" value="66666666-6666-6666-6666-666666666001"/>
+            <column name="title" value="Investment Associate"/>
+            <column name="department" value="Investment"/>
+            <column name="location" value="Hong Kong"/>
+            <column name="type" value="FULL_TIME"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="description" value="Join our investment team to evaluate early-stage opportunities"/>
+            <column name="responsibilities" value="Source deals, conduct due diligence, support portfolio companies"/>
+            <column name="requirements" value="MBA or equivalent, 2+ years in VC/PE or consulting"/>
+            <column name="benefits" value="Competitive salary, health insurance, professional development"/>
+            <column name="experience" value="2-5 years"/>
+            <column name="education" value="MBA preferred"/>
+            <column name="slug" value="investment-associate"/>
+            <column name="date_posted" valueDate="2026-01-15"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="jobs">
+            <column name="id" value="66666666-6666-6666-6666-666666666002"/>
+            <column name="title" value="Analyst"/>
+            <column name="department" value="Investment"/>
+            <column name="location" value="Hong Kong"/>
+            <column name="type" value="FULL_TIME"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="description" value="Support investment team with research and analysis"/>
+            <column name="responsibilities" value="Market research, financial modeling, deal support"/>
+            <column name="requirements" value="Bachelor's degree in finance, economics, or related field"/>
+            <column name="benefits" value="Competitive salary, mentorship program"/>
+            <column name="experience" value="0-2 years"/>
+            <column name="education" value="Bachelor's required"/>
+            <column name="slug" value="analyst"/>
+            <column name="date_posted" valueDate="2026-02-01"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="jobs">
+            <column name="id" value="66666666-6666-6666-6666-666666666003"/>
+            <column name="title" value="Finance &amp; Ops Manager"/>
+            <column name="department" value="Operations"/>
+            <column name="location" value="Hong Kong"/>
+            <column name="type" value="FULL_TIME"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="description" value="Lead finance and operations for the fund"/>
+            <column name="responsibilities" value="Fund accounting, LP reporting, compliance"/>
+            <column name="requirements" value="CPA or CFA, 5+ years in fund operations"/>
+            <column name="benefits" value="Executive compensation package"/>
+            <column name="experience" value="5+ years"/>
+            <column name="education" value="CPA/CFA required"/>
+            <column name="slug" value="finance-ops-manager"/>
+            <column name="date_posted" valueDate="2026-03-01"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="seed-007-insights-cms-settings" author="iman">
+        <insert tableName="insights">
+            <column name="id" value="77777777-7777-7777-7777-777777777001"/>
+            <column name="title" value="The Future of AI in Enterprise"/>
+            <column name="slug" value="future-of-ai-enterprise"/>
+            <column name="excerpt" value="How artificial intelligence is transforming enterprise software"/>
+            <column name="content" value="Artificial intelligence continues to reshape how enterprises operate..."/>
+            <column name="author" value="David Chen"/>
+            <column name="published_date" valueDate="2026-01-10"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="insights">
+            <column name="id" value="77777777-7777-7777-7777-777777777002"/>
+            <column name="title" value="Asia Pacific VC Landscape 2026"/>
+            <column name="slug" value="apac-vc-landscape-2026"/>
+            <column name="excerpt" value="Key trends shaping venture capital in the Asia Pacific region"/>
+            <column name="content" value="The Asia Pacific venture capital landscape is evolving rapidly..."/>
+            <column name="author" value="Sarah Wong"/>
+            <column name="published_date" valueDate="2026-02-15"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="cms_pages">
+            <column name="id" value="88888888-8888-8888-8888-888888888001"/>
+            <column name="title" value="Privacy Policy"/>
+            <column name="slug" value="privacy-policy"/>
+            <column name="content" value="IMan Investment Privacy Policy. We respect your privacy and are committed to protecting your personal data."/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="published_at" valueDate="2026-01-01"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="cms_pages">
+            <column name="id" value="88888888-8888-8888-8888-888888888002"/>
+            <column name="title" value="Terms of Use"/>
+            <column name="slug" value="terms-of-use"/>
+            <column name="content" value="Terms of Use for IMan Investment Platform. By accessing this website, you agree to these terms."/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="published_at" valueDate="2026-01-01"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="settings">
+            <column name="id" value="99999999-9999-9999-9999-999999999001"/>
+            <column name="setting_key" value="site_name"/>
+            <column name="setting_value" value="IMan Investment"/>
+            <column name="description" value="Website name"/>
+            <column name="category" value="general"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="settings">
+            <column name="id" value="99999999-9999-9999-9999-999999999002"/>
+            <column name="setting_key" value="contact_email"/>
+            <column name="setting_value" value="contact@imaninvestment.com"/>
+            <column name="description" value="Contact email"/>
+            <column name="category" value="general"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="settings">
+            <column name="id" value="99999999-9999-9999-9999-999999999003"/>
+            <column name="setting_key" value="contact_phone"/>
+            <column name="setting_value" value="+852 1234 5678"/>
+            <column name="description" value="Contact phone"/>
+            <column name="category" value="general"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="settings">
+            <column name="id" value="99999999-9999-9999-9999-999999999004"/>
+            <column name="setting_key" value="office_address"/>
+            <column name="setting_value" value="Central, Hong Kong"/>
+            <column name="description" value="Office address"/>
+            <column name="category" value="general"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,68 @@
+name: iman-investment
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-iman_investment}
+      POSTGRES_USER: ${POSTGRES_USER:-iman}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-iman_secret}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-iman} -d ${POSTGRES_DB:-iman_investment}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - iman-network
+
+  backend:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-iman_investment}
+      DB_USERNAME: ${POSTGRES_USER:-iman}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-iman_secret}
+      JWT_SECRET: ${JWT_SECRET:-change-this-development-secret-to-at-least-32-random-characters}
+      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+      UPLOAD_PATH: /app/uploads
+      MAIL_HOST: ${MAIL_HOST:-smtp.example.com}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - iman-network
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL:-/api}
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    depends_on:
+      - backend
+    networks:
+      - iman-network
+
+volumes:
+  postgres_data:
+  uploads_data:
+
+networks:
+  iman-network:
+    driver: bridge

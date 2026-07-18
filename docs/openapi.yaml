@@ -1,0 +1,1883 @@
+openapi: 3.1.0
+info:
+  title: IMan Investment Platform API
+  version: 1.0.0
+  summary: Canonical production contract for the public website and administration portal.
+  description: |
+    JSON field names are camelCase. IDs are UUIDs and timestamps are RFC 3339 UTC instants.
+    Public reads expose only published content. `/admin/**` requires a JWT plus the permission
+    stated by each operation. A SUPER_ADMIN bypasses individual permission checks.
+servers:
+  - url: /api
+    description: Same-origin deployment
+tags:
+  - { name: Auth }
+  - { name: Public content }
+  - { name: Business plan submission }
+  - { name: Careers }
+  - { name: Dashboard }
+  - { name: Business plans }
+  - { name: Applicants }
+  - { name: Portfolio administration }
+  - { name: Job administration }
+  - { name: CMS }
+  - { name: Media }
+  - { name: Access control }
+  - { name: Operations }
+security: []
+paths:
+  /auth/login:
+    post:
+      tags: [Auth]
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthSession' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /auth/me:
+    get:
+      tags: [Auth]
+      operationId: getCurrentUser
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Current session
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CurrentUser' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /public/portfolio:
+    get:
+      tags: [Public content]
+      operationId: listPublishedPortfolio
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Size' }
+        - { $ref: '#/components/parameters/Search' }
+        - { name: industry, in: query, schema: { type: string, maxLength: 100 } }
+        - { name: featured, in: query, schema: { type: boolean } }
+        - { name: sort, in: query, schema: { type: string, default: 'displayOrder,asc', pattern: '^(displayOrder|name|createdAt),(asc|desc)$' } }
+      responses:
+        '200':
+          description: Published companies
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PortfolioCompanyPage' }
+  /public/insights:
+    get:
+      tags: [Public content]
+      operationId: listPublishedInsights
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Size' }
+        - { $ref: '#/components/parameters/Search' }
+        - { name: sort, in: query, schema: { type: string, default: 'publishedAt,desc', pattern: '^(publishedAt|title),(asc|desc)$' } }
+      responses:
+        '200':
+          description: Published insights
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/InsightPage' }
+  /public/insights/{slug}:
+    get:
+      tags: [Public content]
+      operationId: getPublishedInsight
+      parameters: [{ $ref: '#/components/parameters/Slug' }]
+      responses:
+        '200':
+          description: Published insight
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Insight' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /public/team:
+    get:
+      tags: [Public content]
+      operationId: listPublishedTeam
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Size' }
+      responses:
+        '200':
+          description: Published team profiles
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TeamMemberPage' }
+  /public/pages/{slug}:
+    get:
+      tags: [Public content]
+      operationId: getPublishedPage
+      description: Canonical replacement for `GET /public/legal/{slug}`; use slugs such as `privacy-policy` and `terms-of-use`.
+      parameters: [{ $ref: '#/components/parameters/Slug' }]
+      responses:
+        '200':
+          description: Published page
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CmsPage' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /public/contact:
+    post:
+      tags: [Public content]
+      operationId: createContactMessage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ContactMessageCreate' }
+      responses:
+        '201':
+          description: Message accepted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SubmissionReceipt' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /public/jobs:
+    get:
+      tags: [Careers]
+      operationId: listPublishedJobs
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Size' }
+        - { $ref: '#/components/parameters/Search' }
+        - { name: department, in: query, schema: { type: string, maxLength: 100 } }
+        - { name: location, in: query, schema: { type: string, maxLength: 100 } }
+        - { name: type, in: query, schema: { $ref: '#/components/schemas/JobType' } }
+        - { name: sort, in: query, schema: { type: string, default: 'publishedAt,desc', pattern: '^(publishedAt|title|department),(asc|desc)$' } }
+      responses:
+        '200':
+          description: Published jobs
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/JobPage' }
+  /public/jobs/{slug}:
+    get:
+      tags: [Careers]
+      operationId: getPublishedJob
+      parameters: [{ $ref: '#/components/parameters/Slug' }]
+      responses:
+        '200':
+          description: Published job
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Job' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /public/jobs/{jobId}/applications:
+    post:
+      tags: [Careers]
+      operationId: applyForJob
+      parameters: [{ $ref: '#/components/parameters/JobId' }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [application, resume]
+              properties:
+                application: { $ref: '#/components/schemas/JobApplicationCreate' }
+                resume: { type: string, format: binary, description: 'PDF, DOC, or DOCX; maximum 10 MiB.' }
+                coverLetter: { type: string, format: binary, description: 'Optional PDF, DOC, or DOCX; maximum 10 MiB.' }
+            encoding:
+              application: { contentType: application/json }
+      responses:
+        '201':
+          description: Application received
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SubmissionReceipt' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '413': { $ref: '#/components/responses/PayloadTooLarge' }
+        '415': { $ref: '#/components/responses/UnsupportedMediaType' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /public/business-plans:
+    post:
+      tags: [Business plan submission]
+      operationId: createBusinessPlan
+      description: Creates a server-side draft or atomically creates and submits it. The returned draft token is shown only once.
+      parameters:
+        - { name: submit, in: query, schema: { type: boolean, default: false } }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [plan]
+              properties:
+                plan: { $ref: '#/components/schemas/BusinessPlanWrite' }
+                documents:
+                  type: array
+                  maxItems: 10
+                  items: { type: string, format: binary }
+            encoding:
+              plan: { contentType: application/json }
+      responses:
+        '201':
+          description: Draft created or submitted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BusinessPlanDraftAccess' }
+        '413': { $ref: '#/components/responses/PayloadTooLarge' }
+        '415': { $ref: '#/components/responses/UnsupportedMediaType' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /public/business-plans/{planId}:
+    get:
+      tags: [Business plan submission]
+      operationId: getOwnBusinessPlanDraft
+      parameters:
+        - { $ref: '#/components/parameters/PlanId' }
+        - { $ref: '#/components/parameters/DraftToken' }
+      responses:
+        '200':
+          description: Draft
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BusinessPlan' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      tags: [Business plan submission]
+      operationId: autosaveBusinessPlanDraft
+      description: Idempotent autosave of supplied fields. Only DRAFT plans are mutable.
+      parameters:
+        - { $ref: '#/components/parameters/PlanId' }
+        - { $ref: '#/components/parameters/DraftToken' }
+        - { $ref: '#/components/parameters/IfMatch' }
+      requestBody:
+        required: true
+        content:
+          application/merge-patch+json:
+            schema: { $ref: '#/components/schemas/BusinessPlanPatch' }
+      responses:
+        '200':
+          description: Saved draft
+          headers:
+            ETag: { schema: { type: string }, description: New entity version. }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BusinessPlan' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '412': { $ref: '#/components/responses/PreconditionFailed' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /public/business-plans/{planId}/documents:
+    post:
+      tags: [Business plan submission]
+      operationId: uploadBusinessPlanDocuments
+      parameters:
+        - { $ref: '#/components/parameters/PlanId' }
+        - { $ref: '#/components/parameters/DraftToken' }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [documents]
+              properties:
+                documents:
+                  type: array
+                  minItems: 1
+                  maxItems: 10
+                  items: { type: string, format: binary }
+      responses:
+        '201':
+          description: Uploaded documents
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/FileAsset' }
+        '413': { $ref: '#/components/responses/PayloadTooLarge' }
+        '415': { $ref: '#/components/responses/UnsupportedMediaType' }
+  /public/business-plans/{planId}/submit:
+    post:
+      tags: [Business plan submission]
+      operationId: submitBusinessPlanDraft
+      parameters:
+        - { $ref: '#/components/parameters/PlanId' }
+        - { $ref: '#/components/parameters/DraftToken' }
+        - { $ref: '#/components/parameters/IfMatch' }
+      responses:
+        '200':
+          description: Submitted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SubmissionReceipt' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '412': { $ref: '#/components/responses/PreconditionFailed' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+  /admin/dashboard:
+    get:
+      tags: [Dashboard]
+      operationId: getDashboard
+      description: 'RBAC: dashboard.view'
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Dashboard aggregates
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Dashboard' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /admin/business-plans:
+    get:
+      tags: [Business plans]
+      operationId: listBusinessPlans
+      description: 'RBAC: business_plans.manage'
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Size' }
+        - { $ref: '#/components/parameters/Search' }
+        - { $ref: '#/components/parameters/AdminSort' }
+        - { name: status, in: query, schema: { $ref: '#/components/schemas/BusinessPlanStatus' } }
+        - { name: assignedToId, in: query, schema: { type: string, format: uuid } }
+        - { name: submittedFrom, in: query, schema: { type: string, format: date-time } }
+        - { name: submittedTo, in: query, schema: { type: string, format: date-time } }
+      responses:
+        '200':
+          description: Matching plans
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BusinessPlanPage' }
+  /admin/business-plans/{planId}:
+    get:
+      tags: [Business plans]
+      operationId: getBusinessPlan
+      description: 'RBAC: business_plans.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PlanId' }]
+      responses:
+        '200':
+          description: Plan detail
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BusinessPlan' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Business plans]
+      operationId: archiveBusinessPlan
+      description: 'RBAC: business_plans.manage. Soft-archives the record and retains audit/history.'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PlanId' }]
+      responses:
+        '204': { description: Archived }
+  /admin/business-plans/{planId}/status:
+    patch:
+      tags: [Business plans]
+      operationId: transitionBusinessPlan
+      description: 'RBAC: business_plans.manage. Server validates the workflow transition.'
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/PlanId' }
+        - { $ref: '#/components/parameters/IfMatch' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/StatusTransitionRequest' }
+      responses:
+        '200':
+          description: Updated plan
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BusinessPlan' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /admin/business-plans/{planId}/assignment:
+    patch:
+      tags: [Business plans]
+      operationId: assignBusinessPlan
+      description: 'RBAC: business_plans.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PlanId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId]
+              properties:
+                userId: { type: [string, 'null'], format: uuid, description: Null unassigns. }
+      responses:
+        '200':
+          description: Updated plan
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BusinessPlan' }
+  /admin/business-plans/{planId}/notes:
+    post:
+      tags: [Business plans]
+      operationId: addBusinessPlanNote
+      description: 'RBAC: business_plans.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/PlanId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NoteCreate' }
+      responses:
+        '201':
+          description: Created note
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Note' }
+  /admin/business-plans/{planId}/history:
+    get:
+      tags: [Business plans]
+      operationId: getBusinessPlanHistory
+      description: 'RBAC: business_plans.manage'
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/PlanId' }
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Size' }
+      responses:
+        '200':
+          description: Immutable workflow history
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/WorkflowEventPage' }
+  /admin/business-plans/{planId}/documents/{documentId}:
+    get:
+      tags: [Business plans]
+      operationId: downloadBusinessPlanDocument
+      description: 'RBAC: business_plans.manage'
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/PlanId' }
+        - { name: documentId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200':
+          description: File content
+          content:
+            application/octet-stream:
+              schema: { type: string, format: binary }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /admin/applicants:
+    get:
+      tags: [Applicants]
+      operationId: listApplicants
+      description: 'RBAC: applicants.manage'
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Size' }
+        - { $ref: '#/components/parameters/Search' }
+        - { $ref: '#/components/parameters/AdminSort' }
+        - { name: status, in: query, schema: { $ref: '#/components/schemas/ApplicantStatus' } }
+        - { name: jobId, in: query, schema: { type: string, format: uuid } }
+      responses:
+        '200':
+          description: Matching applicants
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApplicantPage' }
+  /admin/applicants/{applicantId}:
+    get:
+      tags: [Applicants]
+      operationId: getApplicant
+      description: 'RBAC: applicants.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/ApplicantId' }]
+      responses:
+        '200':
+          description: Applicant detail
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Applicant' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /admin/applicants/{applicantId}/status:
+    patch:
+      tags: [Applicants]
+      operationId: transitionApplicant
+      description: 'RBAC: applicants.manage. Interview and offer transitions require their corresponding record.'
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/ApplicantId' }
+        - { $ref: '#/components/parameters/IfMatch' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ApplicantTransitionRequest' }
+      responses:
+        '200':
+          description: Updated applicant
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Applicant' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /admin/applicants/{applicantId}/notes:
+    post:
+      tags: [Applicants]
+      operationId: addApplicantNote
+      description: 'RBAC: applicants.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/ApplicantId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NoteCreate' }
+      responses:
+        '201':
+          description: Created note
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Note' }
+  /admin/applicants/{applicantId}/history:
+    get:
+      tags: [Applicants]
+      operationId: getApplicantHistory
+      description: 'RBAC: applicants.manage'
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/ApplicantId' }
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Size' }
+      responses:
+        '200':
+          description: Applicant events
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/WorkflowEventPage' }
+  /admin/applicants/{applicantId}/interviews:
+    get:
+      tags: [Applicants]
+      operationId: listApplicantInterviews
+      description: 'RBAC: applicants.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/ApplicantId' }]
+      responses:
+        '200':
+          description: Scheduled and completed interviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Interview' }
+    post:
+      tags: [Applicants]
+      operationId: scheduleApplicantInterview
+      description: 'RBAC: applicants.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/ApplicantId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/InterviewWrite' }
+      responses:
+        '201':
+          description: Scheduled interview
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Interview' }
+  /admin/applicants/{applicantId}/interviews/{interviewId}:
+    put:
+      tags: [Applicants]
+      operationId: updateApplicantInterview
+      description: 'RBAC: applicants.manage'
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/ApplicantId' }
+        - { name: interviewId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/InterviewWrite' }
+      responses:
+        '200':
+          description: Updated interview
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Interview' }
+    delete:
+      tags: [Applicants]
+      operationId: cancelApplicantInterview
+      description: 'RBAC: applicants.manage'
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/ApplicantId' }
+        - { name: interviewId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '204': { description: Cancelled }
+  /admin/applicants/{applicantId}/offer:
+    put:
+      tags: [Applicants]
+      operationId: upsertApplicantOffer
+      description: 'RBAC: applicants.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/ApplicantId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OfferWrite' }
+      responses:
+        '200':
+          description: Offer created or updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Offer' }
+    delete:
+      tags: [Applicants]
+      operationId: withdrawApplicantOffer
+      description: 'RBAC: applicants.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/ApplicantId' }]
+      responses:
+        '204': { description: Offer withdrawn }
+  /admin/applicants/{applicantId}/{fileKind}:
+    get:
+      tags: [Applicants]
+      operationId: downloadApplicantFile
+      description: 'RBAC: applicants.manage'
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/ApplicantId' }
+        - { name: fileKind, in: path, required: true, schema: { type: string, enum: [resume, cover-letter] } }
+      responses:
+        '200':
+          description: Applicant file
+          content:
+            application/octet-stream:
+              schema: { type: string, format: binary }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /admin/portfolio:
+    get:
+      tags: [Portfolio administration]
+      operationId: listAdminPortfolio
+      description: 'RBAC: portfolio.manage'
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Size' }
+        - { $ref: '#/components/parameters/Search' }
+        - { $ref: '#/components/parameters/AdminSort' }
+        - { name: status, in: query, schema: { $ref: '#/components/schemas/ContentStatus' } }
+      responses:
+        '200':
+          description: Portfolio records
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PortfolioCompanyPage' }
+    post:
+      tags: [Portfolio administration]
+      operationId: createPortfolioCompany
+      description: 'RBAC: portfolio.manage'
+      security: [{ bearerAuth: [] }]
+      requestBody: { $ref: '#/components/requestBodies/PortfolioWrite' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PortfolioCompany' }
+  /admin/portfolio/{id}:
+    get:
+      tags: [Portfolio administration]
+      operationId: getPortfolioCompany
+      description: 'RBAC: portfolio.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '200':
+          description: Portfolio company
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PortfolioCompany' }
+    put:
+      tags: [Portfolio administration]
+      operationId: updatePortfolioCompany
+      description: 'RBAC: portfolio.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      requestBody: { $ref: '#/components/requestBodies/PortfolioWrite' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PortfolioCompany' }
+    delete:
+      tags: [Portfolio administration]
+      operationId: deletePortfolioCompany
+      description: 'RBAC: portfolio.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '204': { description: Deleted }
+  /admin/jobs:
+    get:
+      tags: [Job administration]
+      operationId: listAdminJobs
+      description: 'RBAC: jobs.manage'
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Size' }
+        - { $ref: '#/components/parameters/Search' }
+        - { $ref: '#/components/parameters/AdminSort' }
+        - { name: status, in: query, schema: { $ref: '#/components/schemas/JobStatus' } }
+      responses:
+        '200':
+          description: Jobs
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/JobPage' }
+    post:
+      tags: [Job administration]
+      operationId: createJob
+      description: 'RBAC: jobs.manage'
+      security: [{ bearerAuth: [] }]
+      requestBody: { $ref: '#/components/requestBodies/JobWrite' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Job' }
+  /admin/jobs/{id}:
+    get:
+      tags: [Job administration]
+      operationId: getAdminJob
+      description: 'RBAC: jobs.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '200':
+          description: Job
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Job' }
+    put:
+      tags: [Job administration]
+      operationId: updateJob
+      description: 'RBAC: jobs.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      requestBody: { $ref: '#/components/requestBodies/JobWrite' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Job' }
+    delete:
+      tags: [Job administration]
+      operationId: deleteJob
+      description: 'RBAC: jobs.manage; rejected while applicants reference the job unless it is archived.'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '204': { description: Deleted }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /admin/cms/pages:
+    get:
+      tags: [CMS]
+      operationId: listCmsPages
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }, { $ref: '#/components/parameters/Search' }, { $ref: '#/components/parameters/AdminSort' }, { name: status, in: query, schema: { $ref: '#/components/schemas/ContentStatus' } }]
+      responses:
+        '200':
+          description: CMS pages
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CmsPagePage' }
+    post:
+      tags: [CMS]
+      operationId: createCmsPage
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      requestBody: { $ref: '#/components/requestBodies/CmsPageWrite' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CmsPage' }
+  /admin/cms/pages/{id}:
+    get:
+      tags: [CMS]
+      operationId: getCmsPage
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '200': { description: Page, content: { application/json: { schema: { $ref: '#/components/schemas/CmsPage' } } } }
+    put:
+      tags: [CMS]
+      operationId: updateCmsPage
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      requestBody: { $ref: '#/components/requestBodies/CmsPageWrite' }
+      responses:
+        '200': { description: Updated, content: { application/json: { schema: { $ref: '#/components/schemas/CmsPage' } } } }
+    delete:
+      tags: [CMS]
+      operationId: deleteCmsPage
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '204': { description: Deleted }
+  /admin/cms/insights:
+    get:
+      tags: [CMS]
+      operationId: listAdminInsights
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }, { $ref: '#/components/parameters/Search' }, { $ref: '#/components/parameters/AdminSort' }, { name: status, in: query, schema: { $ref: '#/components/schemas/ContentStatus' } }]
+      responses:
+        '200': { description: Insights, content: { application/json: { schema: { $ref: '#/components/schemas/InsightPage' } } } }
+    post:
+      tags: [CMS]
+      operationId: createInsight
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      requestBody: { $ref: '#/components/requestBodies/InsightWrite' }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Insight' } } } }
+  /admin/cms/insights/{id}:
+    get:
+      tags: [CMS]
+      operationId: getAdminInsight
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '200': { description: Insight, content: { application/json: { schema: { $ref: '#/components/schemas/Insight' } } } }
+    put:
+      tags: [CMS]
+      operationId: updateInsight
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      requestBody: { $ref: '#/components/requestBodies/InsightWrite' }
+      responses:
+        '200': { description: Updated, content: { application/json: { schema: { $ref: '#/components/schemas/Insight' } } } }
+    delete:
+      tags: [CMS]
+      operationId: deleteInsight
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '204': { description: Deleted }
+  /admin/cms/team:
+    get:
+      tags: [CMS]
+      operationId: listAdminTeam
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }, { $ref: '#/components/parameters/Search' }, { $ref: '#/components/parameters/AdminSort' }, { name: status, in: query, schema: { $ref: '#/components/schemas/ContentStatus' } }]
+      responses:
+        '200': { description: Team members, content: { application/json: { schema: { $ref: '#/components/schemas/TeamMemberPage' } } } }
+    post:
+      tags: [CMS]
+      operationId: createTeamMember
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      requestBody: { $ref: '#/components/requestBodies/TeamWrite' }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/TeamMember' } } } }
+  /admin/cms/team/{id}:
+    get:
+      tags: [CMS]
+      operationId: getTeamMember
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '200': { description: Team member, content: { application/json: { schema: { $ref: '#/components/schemas/TeamMember' } } } }
+    put:
+      tags: [CMS]
+      operationId: updateTeamMember
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      requestBody: { $ref: '#/components/requestBodies/TeamWrite' }
+      responses:
+        '200': { description: Updated, content: { application/json: { schema: { $ref: '#/components/schemas/TeamMember' } } } }
+    delete:
+      tags: [CMS]
+      operationId: deleteTeamMember
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '204': { description: Deleted }
+  /admin/media:
+    get:
+      tags: [Media]
+      operationId: listMedia
+      description: 'RBAC: media.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }, { $ref: '#/components/parameters/Search' }, { $ref: '#/components/parameters/AdminSort' }, { name: type, in: query, schema: { $ref: '#/components/schemas/MediaType' } }]
+      responses:
+        '200': { description: Media, content: { application/json: { schema: { $ref: '#/components/schemas/MediaAssetPage' } } } }
+    post:
+      tags: [Media]
+      operationId: uploadMedia
+      description: 'RBAC: media.manage'
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file: { type: string, format: binary }
+                altText: { type: [string, 'null'], maxLength: 500 }
+      responses:
+        '201': { description: Uploaded, content: { application/json: { schema: { $ref: '#/components/schemas/MediaAsset' } } } }
+        '413': { $ref: '#/components/responses/PayloadTooLarge' }
+        '415': { $ref: '#/components/responses/UnsupportedMediaType' }
+  /admin/media/{id}:
+    delete:
+      tags: [Media]
+      operationId: deleteMedia
+      description: 'RBAC: media.manage; returns 409 while referenced by published content.'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '204': { description: Deleted }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /admin/media/{id}/download:
+    get:
+      tags: [Media]
+      operationId: downloadMedia
+      description: 'RBAC: media.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '200': { description: File, content: { application/octet-stream: { schema: { type: string, format: binary } } } }
+  /admin/users:
+    get:
+      tags: [Access control]
+      operationId: listUsers
+      description: 'RBAC: users.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }, { $ref: '#/components/parameters/Search' }, { $ref: '#/components/parameters/AdminSort' }, { name: active, in: query, schema: { type: boolean } }]
+      responses:
+        '200': { description: Users, content: { application/json: { schema: { $ref: '#/components/schemas/UserPage' } } } }
+    post:
+      tags: [Access control]
+      operationId: createUser
+      description: 'RBAC: users.manage'
+      security: [{ bearerAuth: [] }]
+      requestBody: { $ref: '#/components/requestBodies/UserWrite' }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+  /admin/users/{id}:
+    get:
+      tags: [Access control]
+      operationId: getUser
+      description: 'RBAC: users.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '200': { description: User, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+    put:
+      tags: [Access control]
+      operationId: updateUser
+      description: 'RBAC: users.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      requestBody: { $ref: '#/components/requestBodies/UserWrite' }
+      responses:
+        '200': { description: Updated, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+    delete:
+      tags: [Access control]
+      operationId: deactivateUser
+      description: 'RBAC: users.manage. Deactivates rather than physically deleting.'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '204': { description: Deactivated }
+  /admin/roles:
+    get:
+      tags: [Access control]
+      operationId: listRoles
+      description: 'RBAC: roles.manage'
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Roles
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: '#/components/schemas/Role' } }
+    post:
+      tags: [Access control]
+      operationId: createRole
+      description: 'RBAC: roles.manage'
+      security: [{ bearerAuth: [] }]
+      requestBody: { $ref: '#/components/requestBodies/RoleWrite' }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Role' } } } }
+  /admin/roles/{id}:
+    put:
+      tags: [Access control]
+      operationId: updateRole
+      description: 'RBAC: roles.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      requestBody: { $ref: '#/components/requestBodies/RoleWrite' }
+      responses:
+        '200': { description: Updated, content: { application/json: { schema: { $ref: '#/components/schemas/Role' } } } }
+    delete:
+      tags: [Access control]
+      operationId: deleteRole
+      description: 'RBAC: roles.manage; system roles cannot be deleted.'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '204': { description: Deleted }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /admin/permissions:
+    get:
+      tags: [Access control]
+      operationId: listPermissions
+      description: 'RBAC: roles.manage'
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Permissions
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: '#/components/schemas/Permission' } }
+    post:
+      tags: [Access control]
+      operationId: createPermission
+      description: 'RBAC: roles.manage; SUPER_ADMIN only in production.'
+      security: [{ bearerAuth: [] }]
+      requestBody: { $ref: '#/components/requestBodies/PermissionWrite' }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Permission' } } } }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /admin/permissions/{id}:
+    put:
+      tags: [Access control]
+      operationId: updatePermission
+      description: 'RBAC: roles.manage; SUPER_ADMIN only in production.'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      requestBody: { $ref: '#/components/requestBodies/PermissionWrite' }
+      responses:
+        '200': { description: Updated, content: { application/json: { schema: { $ref: '#/components/schemas/Permission' } } } }
+    delete:
+      tags: [Access control]
+      operationId: deletePermission
+      description: 'RBAC: roles.manage; SUPER_ADMIN only. Referenced or built-in permissions cannot be deleted.'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '204': { description: Deleted }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /admin/audit-logs:
+    get:
+      tags: [Operations]
+      operationId: listAuditEvents
+      description: 'RBAC: audit.view'
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/Page' }
+        - { $ref: '#/components/parameters/Size' }
+        - { $ref: '#/components/parameters/AdminSort' }
+        - { name: actorId, in: query, schema: { type: string, format: uuid } }
+        - { name: action, in: query, schema: { $ref: '#/components/schemas/AuditAction' } }
+        - { name: resourceType, in: query, schema: { type: string } }
+        - { name: resourceId, in: query, schema: { type: string, format: uuid } }
+        - { name: from, in: query, schema: { type: string, format: date-time } }
+        - { name: to, in: query, schema: { type: string, format: date-time } }
+      responses:
+        '200': { description: Audit events, content: { application/json: { schema: { $ref: '#/components/schemas/AuditEventPage' } } } }
+  /admin/settings:
+    get:
+      tags: [Operations]
+      operationId: listSettings
+      description: 'RBAC: settings.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ name: category, in: query, schema: { type: string, maxLength: 50 } }]
+      responses:
+        '200':
+          description: Settings grouped by stable key
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: '#/components/schemas/Setting' } }
+    put:
+      tags: [Operations]
+      operationId: updateSettings
+      description: 'RBAC: settings.manage. Atomic batch update used by the settings screen.'
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [settings]
+              properties:
+                settings:
+                  type: array
+                  minItems: 1
+                  items: { $ref: '#/components/schemas/SettingUpdate' }
+      responses:
+        '200':
+          description: Updated settings
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: '#/components/schemas/Setting' } }
+  /admin/settings/{key}:
+    put:
+      tags: [Operations]
+      operationId: updateSetting
+      description: 'RBAC: settings.manage. Retained for compatibility with the current controller.'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ name: key, in: path, required: true, schema: { type: string, maxLength: 100 } }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SettingUpdate' }
+      responses:
+        '200': { description: Updated, content: { application/json: { schema: { $ref: '#/components/schemas/Setting' } } } }
+  /admin/notifications:
+    get:
+      tags: [Operations]
+      operationId: listNotifications
+      description: Returns only the current user's notifications.
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }, { name: read, in: query, schema: { type: boolean } }, { $ref: '#/components/parameters/AdminSort' }]
+      responses:
+        '200': { description: Notifications, content: { application/json: { schema: { $ref: '#/components/schemas/NotificationPage' } } } }
+    post:
+      tags: [Operations]
+      operationId: createNotification
+      description: 'RBAC: users.manage or settings.manage'
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NotificationCreate' }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Notification' } } } }
+  /admin/notifications/{id}/read:
+    patch:
+      tags: [Operations]
+      operationId: markNotificationRead
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '200': { description: Updated, content: { application/json: { schema: { $ref: '#/components/schemas/Notification' } } } }
+  /admin/notifications/{id}:
+    delete:
+      tags: [Operations]
+      operationId: deleteOwnNotification
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '204': { description: Deleted }
+  /admin/contact-messages:
+    get:
+      tags: [Operations]
+      operationId: listContactMessages
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }, { $ref: '#/components/parameters/Search' }, { name: read, in: query, schema: { type: boolean } }, { $ref: '#/components/parameters/AdminSort' }]
+      responses:
+        '200': { description: Contact messages, content: { application/json: { schema: { $ref: '#/components/schemas/ContactMessagePage' } } } }
+  /admin/contact-messages/{id}/read:
+    patch:
+      tags: [Operations]
+      operationId: markContactMessageRead
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '200': { description: Updated, content: { application/json: { schema: { $ref: '#/components/schemas/ContactMessage' } } } }
+  /admin/contact-messages/{id}:
+    delete:
+      tags: [Operations]
+      operationId: deleteContactMessage
+      description: 'RBAC: cms.manage'
+      security: [{ bearerAuth: [] }]
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '204': { description: Deleted }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Short-lived access JWT issued by `/auth/login`.
+  parameters:
+    Id: { name: id, in: path, required: true, schema: { type: string, format: uuid } }
+    PlanId: { name: planId, in: path, required: true, schema: { type: string, format: uuid } }
+    JobId: { name: jobId, in: path, required: true, schema: { type: string, format: uuid } }
+    ApplicantId: { name: applicantId, in: path, required: true, schema: { type: string, format: uuid } }
+    Slug: { name: slug, in: path, required: true, schema: { type: string, minLength: 1, maxLength: 200, pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$' } }
+    Page: { name: page, in: query, description: Zero-based page index., schema: { type: integer, minimum: 0, default: 0 } }
+    Size: { name: size, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+    Search: { name: search, in: query, schema: { type: string, maxLength: 200 } }
+    AdminSort: { name: sort, in: query, description: 'Single allow-listed field and direction.', schema: { type: string, default: 'createdAt,desc', pattern: '^[A-Za-z][A-Za-z0-9]*,(asc|desc)$' } }
+    DraftToken: { name: X-Draft-Token, in: header, required: true, schema: { type: string, minLength: 32 }, description: Opaque secret returned once when the draft is created; never place it in a URL. }
+    IfMatch: { name: If-Match, in: header, required: true, schema: { type: string }, description: ETag from the most recent representation; prevents lost updates. }
+  requestBodies:
+    PortfolioWrite: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PortfolioCompanyWrite' } } } }
+    JobWrite: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/JobWrite' } } } }
+    CmsPageWrite: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/CmsPageWrite' } } } }
+    InsightWrite: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/InsightWrite' } } } }
+    TeamWrite: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/TeamMemberWrite' } } } }
+    UserWrite: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/UserWrite' } } } }
+    RoleWrite: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/RoleWrite' } } } }
+    PermissionWrite: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/PermissionWrite' } } } }
+  responses:
+    Unauthorized: { description: 'Missing, invalid, or expired credentials.', content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+    Forbidden: { description: Authenticated but not authorized., content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+    NotFound: { description: Resource not found., content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+    Conflict: { description: State or uniqueness conflict., content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+    PreconditionFailed: { description: ETag is stale., content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+    PayloadTooLarge: { description: Upload exceeds an endpoint or aggregate limit., content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+    UnsupportedMediaType: { description: File type is not allowed., content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } } }
+    ValidationError: { description: Request validation failed., content: { application/problem+json: { schema: { $ref: '#/components/schemas/ValidationProblem' } } } }
+    RateLimited:
+      description: Too many requests.
+      headers: { Retry-After: { schema: { type: integer }, description: Seconds until retry. } }
+      content: { application/problem+json: { schema: { $ref: '#/components/schemas/Problem' } } }
+  schemas:
+    Problem:
+      type: object
+      required: [type, title, status, detail, instance, requestId]
+      properties:
+        type: { type: string, format: uri-reference }
+        title: { type: string }
+        status: { type: integer, minimum: 400, maximum: 599 }
+        detail: { type: string }
+        instance: { type: string, format: uri-reference }
+        requestId: { type: string }
+        code: { type: [string, 'null'], description: Stable machine-readable error code. }
+    ValidationProblem:
+      allOf:
+        - { $ref: '#/components/schemas/Problem' }
+        - type: object
+          required: [errors]
+          properties:
+            errors:
+              type: array
+              items:
+                type: object
+                required: [field, code, message]
+                properties:
+                  field: { type: string, description: 'JSON Pointer, e.g. `/founder/email`.' }
+                  code: { type: string }
+                  message: { type: string }
+                  rejectedValue: {}
+    PageMeta:
+      type: object
+      required: [page, size, totalElements, totalPages, first, last, empty, sort]
+      properties:
+        page: { type: integer, minimum: 0 }
+        size: { type: integer, minimum: 1 }
+        totalElements: { type: integer, format: int64, minimum: 0 }
+        totalPages: { type: integer, minimum: 0 }
+        first: { type: boolean }
+        last: { type: boolean }
+        empty: { type: boolean }
+        sort: { type: string, example: 'createdAt,desc' }
+    AuditFields:
+      type: object
+      required: [id, createdAt, updatedAt]
+      properties:
+        id: { type: string, format: uuid }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    UserSummary:
+      type: object
+      required: [id, displayName, email]
+      properties:
+        id: { type: string, format: uuid }
+        displayName: { type: string }
+        email: { type: string, format: email }
+        avatarUrl: { type: [string, 'null'], format: uri }
+    LoginRequest:
+      type: object
+      additionalProperties: false
+      required: [email, password]
+      properties:
+        email: { type: string, format: email, maxLength: 200 }
+        password: { type: string, format: password, minLength: 12, maxLength: 128 }
+    AuthSession:
+      type: object
+      required: [accessToken, tokenType, expiresAt, user]
+      properties:
+        accessToken: { type: string, writeOnly: true }
+        tokenType: { type: string, const: Bearer }
+        expiresAt: { type: string, format: date-time }
+        user: { $ref: '#/components/schemas/CurrentUser' }
+    CurrentUser:
+      allOf:
+        - { $ref: '#/components/schemas/UserSummary' }
+        - type: object
+          required: [firstName, lastName, roles, permissions]
+          properties:
+            firstName: { type: string }
+            lastName: { type: string }
+            roles: { type: array, uniqueItems: true, items: { type: string } }
+            permissions: { type: array, uniqueItems: true, items: { type: string } }
+    ContentStatus: { type: string, enum: [DRAFT, PUBLISHED, ARCHIVED] }
+    BusinessPlanStatus: { type: string, enum: [DRAFT, SUBMITTED, REVIEWING, APPROVED, REJECTED, ARCHIVED] }
+    ApplicantStatus: { type: string, enum: [NEW, REVIEWING, INTERVIEW, OFFER, HIRED, REJECTED, WITHDRAWN] }
+    JobStatus: { type: string, enum: [DRAFT, PUBLISHED, CLOSED, ARCHIVED] }
+    JobType: { type: string, enum: [FULL_TIME, PART_TIME, CONTRACT, INTERNSHIP, TEMPORARY] }
+    MediaType: { type: string, enum: [IMAGE, DOCUMENT, VIDEO, OTHER] }
+    AuditAction: { type: string, enum: [CREATE, UPDATE, DELETE, LOGIN, LOGOUT, ASSIGN, STATUS_CHANGE, PUBLISH, ARCHIVE, UPLOAD, DOWNLOAD] }
+    Money:
+      type: object
+      required: [amount, currency]
+      properties:
+        amount: { type: number, minimum: 0, multipleOf: 0.01 }
+        currency: { type: string, pattern: '^[A-Z]{3}$', example: USD }
+    FileAsset:
+      type: object
+      required: [id, originalName, mediaType, mimeType, sizeBytes, downloadUrl, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        originalName: { type: string, maxLength: 255 }
+        mediaType: { $ref: '#/components/schemas/MediaType' }
+        mimeType: { type: string }
+        sizeBytes: { type: integer, format: int64, minimum: 0 }
+        downloadUrl: { type: string, format: uri-reference }
+        createdAt: { type: string, format: date-time }
+    PortfolioCompanyWrite:
+      type: object
+      additionalProperties: false
+      required: [name, industry, status]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 200 }
+        industry: { type: string, minLength: 1, maxLength: 100 }
+        description: { type: [string, 'null'], maxLength: 10000 }
+        imageAssetId: { type: [string, 'null'], format: uuid }
+        websiteUrl: { type: [string, 'null'], format: uri, maxLength: 500 }
+        featured: { type: boolean, default: false }
+        displayOrder: { type: integer, minimum: 0, default: 0 }
+        status: { $ref: '#/components/schemas/ContentStatus' }
+    PortfolioCompany:
+      allOf:
+        - { $ref: '#/components/schemas/AuditFields' }
+        - { $ref: '#/components/schemas/PortfolioCompanyWrite' }
+        - type: object
+          properties:
+            imageUrl: { type: [string, 'null'], format: uri-reference, readOnly: true }
+    InsightWrite:
+      type: object
+      additionalProperties: false
+      required: [title, slug, content, status]
+      properties:
+        title: { type: string, minLength: 1, maxLength: 300 }
+        slug: { type: string, pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$', maxLength: 200 }
+        category: { type: [string, 'null'], maxLength: 100 }
+        excerpt: { type: [string, 'null'], maxLength: 1000 }
+        content: { type: string, minLength: 1, maxLength: 1000000 }
+        imageAssetId: { type: [string, 'null'], format: uuid }
+        authorName: { type: [string, 'null'], maxLength: 200 }
+        status: { $ref: '#/components/schemas/ContentStatus' }
+        publishedAt: { type: [string, 'null'], format: date-time }
+        metaTitle: { type: [string, 'null'], maxLength: 200 }
+        metaDescription: { type: [string, 'null'], maxLength: 500 }
+    Insight:
+      allOf:
+        - { $ref: '#/components/schemas/AuditFields' }
+        - { $ref: '#/components/schemas/InsightWrite' }
+        - type: object
+          properties:
+            imageUrl: { type: [string, 'null'], format: uri-reference, readOnly: true }
+    TeamMemberWrite:
+      type: object
+      additionalProperties: false
+      required: [fullName, roleTitle, status]
+      properties:
+        fullName: { type: string, minLength: 1, maxLength: 200 }
+        roleTitle: { type: string, minLength: 1, maxLength: 100 }
+        bio: { type: [string, 'null'], maxLength: 10000 }
+        imageAssetId: { type: [string, 'null'], format: uuid }
+        linkedinUrl: { type: [string, 'null'], format: uri, maxLength: 500 }
+        displayOrder: { type: integer, minimum: 0, default: 0 }
+        status: { $ref: '#/components/schemas/ContentStatus' }
+    TeamMember:
+      allOf:
+        - { $ref: '#/components/schemas/AuditFields' }
+        - { $ref: '#/components/schemas/TeamMemberWrite' }
+        - type: object
+          properties:
+            imageUrl: { type: [string, 'null'], format: uri-reference, readOnly: true }
+    CmsPageWrite:
+      type: object
+      additionalProperties: false
+      required: [title, slug, content, status]
+      properties:
+        title: { type: string, minLength: 1, maxLength: 200 }
+        slug: { type: string, pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$', maxLength: 200 }
+        pageType: { type: string, enum: [STANDARD, LEGAL], default: STANDARD }
+        content: { type: string, minLength: 1, maxLength: 1000000 }
+        metaTitle: { type: [string, 'null'], maxLength: 200 }
+        metaDescription: { type: [string, 'null'], maxLength: 500 }
+        status: { $ref: '#/components/schemas/ContentStatus' }
+        publishedAt: { type: [string, 'null'], format: date-time }
+    CmsPage:
+      allOf:
+        - { $ref: '#/components/schemas/AuditFields' }
+        - { $ref: '#/components/schemas/CmsPageWrite' }
+    JobWrite:
+      type: object
+      additionalProperties: false
+      required: [title, slug, type, description, status]
+      properties:
+        title: { type: string, minLength: 1, maxLength: 200 }
+        slug: { type: string, pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$', maxLength: 200 }
+        department: { type: [string, 'null'], maxLength: 100 }
+        location: { type: [string, 'null'], maxLength: 100 }
+        type: { $ref: '#/components/schemas/JobType' }
+        status: { $ref: '#/components/schemas/JobStatus' }
+        summary: { type: [string, 'null'], maxLength: 1000 }
+        description: { type: string, minLength: 1, maxLength: 100000 }
+        responsibilities: { type: [string, 'null'], maxLength: 100000 }
+        requirements: { type: [string, 'null'], maxLength: 100000 }
+        benefits: { type: [string, 'null'], maxLength: 100000 }
+        experience: { type: [string, 'null'], maxLength: 100 }
+        education: { type: [string, 'null'], maxLength: 100 }
+        salaryRange:
+          oneOf: [{ $ref: '#/components/schemas/SalaryRange' }, { type: 'null' }]
+        metaTitle: { type: [string, 'null'], maxLength: 200 }
+        metaDescription: { type: [string, 'null'], maxLength: 500 }
+        publishedAt: { type: [string, 'null'], format: date-time, readOnly: true }
+        closesAt: { type: [string, 'null'], format: date-time }
+    SalaryRange:
+      type: object
+      required: [minimum, maximum, currency]
+      properties:
+        minimum: { type: number, minimum: 0, multipleOf: 0.01 }
+        maximum: { type: number, minimum: 0, multipleOf: 0.01 }
+        currency: { type: string, pattern: '^[A-Z]{3}$' }
+        period: { type: string, enum: [HOUR, MONTH, YEAR], default: YEAR }
+    Job:
+      allOf:
+        - { $ref: '#/components/schemas/AuditFields' }
+        - { $ref: '#/components/schemas/JobWrite' }
+    JobApplicationCreate:
+      type: object
+      additionalProperties: false
+      required: [firstName, lastName, email]
+      properties:
+        firstName: { type: string, minLength: 1, maxLength: 100 }
+        lastName: { type: string, minLength: 1, maxLength: 100 }
+        email: { type: string, format: email, maxLength: 200 }
+        phone: { type: [string, 'null'], maxLength: 50 }
+        linkedinUrl: { type: [string, 'null'], format: uri, maxLength: 500 }
+        coverLetterText: { type: [string, 'null'], maxLength: 20000 }
+    BusinessPlanWrite:
+      type: object
+      additionalProperties: false
+      required: [founder, company, currentStep]
+      properties:
+        founder: { $ref: '#/components/schemas/Founder' }
+        company: { $ref: '#/components/schemas/CompanyProfile' }
+        traction: { $ref: '#/components/schemas/Traction' }
+        currentStep: { type: integer, minimum: 1, maximum: 10 }
+    BusinessPlanPatch:
+      description: Same fields as BusinessPlanWrite, all optional; explicit null clears nullable values.
+      type: object
+      additionalProperties: false
+      properties:
+        founder: { $ref: '#/components/schemas/FounderPatch' }
+        company: { $ref: '#/components/schemas/CompanyProfilePatch' }
+        traction: { $ref: '#/components/schemas/TractionPatch' }
+        currentStep: { type: integer, minimum: 1, maximum: 10 }
+    Founder:
+      type: object
+      required: [fullName, email]
+      properties:
+        fullName: { type: string, minLength: 1, maxLength: 200 }
+        position: { type: [string, 'null'], maxLength: 100 }
+        email: { type: string, format: email, maxLength: 200 }
+        phone: { type: [string, 'null'], maxLength: 50 }
+        countryCode: { type: [string, 'null'], pattern: '^[A-Z]{2}$' }
+        linkedinUrl: { type: [string, 'null'], format: uri, maxLength: 500 }
+    FounderPatch:
+      type: object
+      properties:
+        fullName: { type: [string, 'null'], maxLength: 200 }
+        position: { type: [string, 'null'], maxLength: 100 }
+        email: { type: [string, 'null'], format: email, maxLength: 200 }
+        phone: { type: [string, 'null'], maxLength: 50 }
+        countryCode: { type: [string, 'null'], pattern: '^[A-Z]{2}$' }
+        linkedinUrl: { type: [string, 'null'], format: uri, maxLength: 500 }
+    CompanyProfile:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 200 }
+        websiteUrl: { type: [string, 'null'], format: uri, maxLength: 500 }
+        industry: { type: [string, 'null'], maxLength: 100 }
+        stage: { type: [string, 'null'], maxLength: 50 }
+        teamSize: { type: [integer, 'null'], minimum: 0 }
+        foundedOn: { type: [string, 'null'], format: date }
+        description: { type: [string, 'null'], maxLength: 20000 }
+    CompanyProfilePatch:
+      type: object
+      properties:
+        name: { type: [string, 'null'], maxLength: 200 }
+        websiteUrl: { type: [string, 'null'], format: uri, maxLength: 500 }
+        industry: { type: [string, 'null'], maxLength: 100 }
+        stage: { type: [string, 'null'], maxLength: 50 }
+        teamSize: { type: [integer, 'null'], minimum: 0 }
+        foundedOn: { type: [string, 'null'], format: date }
+        description: { type: [string, 'null'], maxLength: 20000 }
+    Traction:
+      type: object
+      properties:
+        fundingRequested:
+          oneOf: [{ $ref: '#/components/schemas/Money' }, { type: 'null' }]
+        annualRevenue:
+          oneOf: [{ $ref: '#/components/schemas/Money' }, { type: 'null' }]
+        monthlyGrowthPercent: { type: [number, 'null'], minimum: -100, maximum: 100000 }
+    TractionPatch: { $ref: '#/components/schemas/Traction' }
+    BusinessPlan:
+      allOf:
+        - { $ref: '#/components/schemas/AuditFields' }
+        - { $ref: '#/components/schemas/BusinessPlanWrite' }
+        - type: object
+          required: [status, version, documents, notes]
+          properties:
+            status: { $ref: '#/components/schemas/BusinessPlanStatus' }
+            version: { type: integer, minimum: 0 }
+            submittedAt: { type: [string, 'null'], format: date-time }
+            assignedTo:
+              oneOf: [{ $ref: '#/components/schemas/UserSummary' }, { type: 'null' }]
+            documents: { type: array, items: { $ref: '#/components/schemas/FileAsset' } }
+            notes: { type: array, items: { $ref: '#/components/schemas/Note' } }
+    BusinessPlanDraftAccess:
+      type: object
+      required: [plan, draftToken]
+      properties:
+        plan: { $ref: '#/components/schemas/BusinessPlan' }
+        draftToken: { type: string, writeOnly: true, description: Returned only once. Store securely in browser storage. }
+    SubmissionReceipt:
+      type: object
+      required: [id, reference, status, receivedAt]
+      properties:
+        id: { type: string, format: uuid }
+        reference: { type: string }
+        status: { type: string }
+        receivedAt: { type: string, format: date-time }
+    NoteCreate:
+      type: object
+      additionalProperties: false
+      required: [content]
+      properties:
+        content: { type: string, minLength: 1, maxLength: 10000 }
+    Note:
+      type: object
+      required: [id, author, content, createdAt, updatedAt]
+      properties:
+        id: { type: string, format: uuid }
+        author: { $ref: '#/components/schemas/UserSummary' }
+        content: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    StatusTransitionRequest:
+      type: object
+      required: [status]
+      properties:
+        status: { $ref: '#/components/schemas/BusinessPlanStatus' }
+        comment: { type: [string, 'null'], maxLength: 5000 }
+    ApplicantTransitionRequest:
+      type: object
+      required: [status]
+      properties:
+        status: { $ref: '#/components/schemas/ApplicantStatus' }
+        comment: { type: [string, 'null'], maxLength: 5000 }
+        hiredOn: { type: [string, 'null'], format: date, description: Required when transitioning to HIRED. }
+    WorkflowEvent:
+      type: object
+      required: [id, eventType, toStatus, actor, occurredAt]
+      properties:
+        id: { type: string, format: uuid }
+        eventType: { type: string, enum: [STATUS_CHANGED, ASSIGNED, NOTE_ADDED, INTERVIEW_SCHEDULED, INTERVIEW_UPDATED, OFFER_CREATED, OFFER_WITHDRAWN] }
+        fromStatus: { type: [string, 'null'] }
+        toStatus: { type: string }
+        actor:
+          oneOf: [{ $ref: '#/components/schemas/UserSummary' }, { type: 'null' }]
+        comment: { type: [string, 'null'] }
+        metadata: { type: object, additionalProperties: true }
+        occurredAt: { type: string, format: date-time }
+    Applicant:
+      allOf:
+        - { $ref: '#/components/schemas/AuditFields' }
+        - type: object
+          required: [job, firstName, lastName, displayName, email, status, resume, notes, interviews]
+          properties:
+            job:
+              type: object
+              required: [id, title, slug]
+              properties:
+                id: { type: string, format: uuid }
+                title: { type: string }
+                slug: { type: string }
+            firstName: { type: string }
+            lastName: { type: string }
+            displayName: { type: string, readOnly: true }
+            email: { type: string, format: email }
+            phone: { type: [string, 'null'] }
+            linkedinUrl: { type: [string, 'null'], format: uri }
+            coverLetterText: { type: [string, 'null'] }
+            status: { $ref: '#/components/schemas/ApplicantStatus' }
+            resume: { $ref: '#/components/schemas/FileAsset' }
+            coverLetterFile:
+              oneOf: [{ $ref: '#/components/schemas/FileAsset' }, { type: 'null' }]
+            notes: { type: array, items: { $ref: '#/components/schemas/Note' } }
+            interviews: { type: array, items: { $ref: '#/components/schemas/Interview' } }
+            offer:
+              oneOf: [{ $ref: '#/components/schemas/Offer' }, { type: 'null' }]
+            hiredOn: { type: [string, 'null'], format: date }
+    InterviewWrite:
+      type: object
+      required: [stage, startsAt, durationMinutes, timezone, interviewerIds, format]
+      properties:
+        stage: { type: string, maxLength: 100 }
+        startsAt: { type: string, format: date-time }
+        durationMinutes: { type: integer, minimum: 15, maximum: 480 }
+        timezone: { type: string, example: Asia/Hong_Kong }
+        interviewerIds: { type: array, minItems: 1, uniqueItems: true, items: { type: string, format: uuid } }
+        format: { type: string, enum: [VIDEO, PHONE, ONSITE] }
+        locationOrMeetingUrl: { type: [string, 'null'], maxLength: 500 }
+        status: { type: string, enum: [SCHEDULED, COMPLETED, CANCELLED, NO_SHOW], default: SCHEDULED }
+        feedback: { type: [string, 'null'], maxLength: 20000 }
+    Interview:
+      allOf:
+        - { $ref: '#/components/schemas/AuditFields' }
+        - { $ref: '#/components/schemas/InterviewWrite' }
+        - type: object
+          properties:
+            interviewers: { type: array, items: { $ref: '#/components/schemas/UserSummary' }, readOnly: true }
+    OfferWrite:
+      type: object
+      required: [title, compensation, proposedStartDate, expiresAt, status]
+      properties:
+        title: { type: string, minLength: 1, maxLength: 200 }
+        compensation: { $ref: '#/components/schemas/Money' }
+        proposedStartDate: { type: string, format: date }
+        expiresAt: { type: string, format: date-time }
+        status: { type: string, enum: [DRAFT, SENT, ACCEPTED, DECLINED, WITHDRAWN] }
+        notes: { type: [string, 'null'], maxLength: 10000 }
+    Offer:
+      allOf:
+        - { $ref: '#/components/schemas/AuditFields' }
+        - { $ref: '#/components/schemas/OfferWrite' }
+        - type: object
+          properties:
+            sentAt: { type: [string, 'null'], format: date-time }
+            respondedAt: { type: [string, 'null'], format: date-time }
+    MediaAsset:
+      allOf:
+        - { $ref: '#/components/schemas/FileAsset' }
+        - type: object
+          required: [url, altText, uploadedBy]
+          properties:
+            url: { type: string, format: uri-reference }
+            altText: { type: [string, 'null'] }
+            uploadedBy:
+              oneOf: [{ $ref: '#/components/schemas/UserSummary' }, { type: 'null' }]
+    UserWrite:
+      type: object
+      additionalProperties: false
+      required: [email, firstName, lastName, active, roleIds]
+      properties:
+        email: { type: string, format: email, maxLength: 200 }
+        firstName: { type: string, minLength: 1, maxLength: 100 }
+        lastName: { type: string, minLength: 1, maxLength: 100 }
+        phone: { type: [string, 'null'], maxLength: 50 }
+        avatarAssetId: { type: [string, 'null'], format: uuid }
+        password: { type: [string, 'null'], format: password, minLength: 12, maxLength: 128, description: Required on create; omit on update to retain current password. }
+        active: { type: boolean }
+        roleIds: { type: array, uniqueItems: true, items: { type: string, format: uuid } }
+    User:
+      allOf:
+        - { $ref: '#/components/schemas/AuditFields' }
+        - type: object
+          required: [email, firstName, lastName, displayName, active, roles]
+          properties:
+            email: { type: string, format: email }
+            firstName: { type: string }
+            lastName: { type: string }
+            displayName: { type: string }
+            phone: { type: [string, 'null'] }
+            avatarUrl: { type: [string, 'null'], format: uri-reference }
+            active: { type: boolean }
+            roles: { type: array, items: { $ref: '#/components/schemas/Role' } }
+    RoleWrite:
+      type: object
+      required: [name, permissionIds]
+      properties:
+        name: { type: string, pattern: '^[A-Z][A-Z0-9_]*$', maxLength: 50 }
+        description: { type: [string, 'null'], maxLength: 255 }
+        permissionIds: { type: array, uniqueItems: true, items: { type: string, format: uuid } }
+    Role:
+      allOf:
+        - { $ref: '#/components/schemas/AuditFields' }
+        - type: object
+          required: [name, permissions, userCount, system]
+          properties:
+            name: { type: string }
+            description: { type: [string, 'null'] }
+            permissions: { type: array, items: { $ref: '#/components/schemas/Permission' } }
+            userCount: { type: integer, minimum: 0 }
+            system: { type: boolean }
+    Permission:
+      allOf:
+        - { $ref: '#/components/schemas/AuditFields' }
+        - type: object
+          required: [code, name, module]
+          properties:
+            code: { type: string, pattern: '^[a-z_]+\\.[a-z_]+$' }
+            name: { type: string }
+            description: { type: [string, 'null'] }
+            module: { type: string }
+    PermissionWrite:
+      type: object
+      additionalProperties: false
+      required: [code, name, module]
+      properties:
+        code: { type: string, pattern: '^[a-z_]+\\.[a-z_]+$', maxLength: 100 }
+        name: { type: string, minLength: 1, maxLength: 100 }
+        description: { type: [string, 'null'], maxLength: 255 }
+        module: { type: string, minLength: 1, maxLength: 50 }
+    AuditEvent:
+      type: object
+      required: [id, actor, action, resourceType, occurredAt, requestId]
+      properties:
+        id: { type: string, format: uuid }
+        actor:
+          oneOf: [{ $ref: '#/components/schemas/UserSummary' }, { type: 'null' }]
+        action: { $ref: '#/components/schemas/AuditAction' }
+        resourceType: { type: string }
+        resourceId: { type: [string, 'null'], format: uuid }
+        changes: { type: object, additionalProperties: true, description: Redacted field-level before/after values; never contains secrets or file bytes. }
+        ipAddress: { type: [string, 'null'] }
+        userAgent: { type: [string, 'null'] }
+        requestId: { type: string }
+        occurredAt: { type: string, format: date-time }
+    SettingUpdate:
+      type: object
+      required: [key, value]
+      properties:
+        key: { type: string, maxLength: 100 }
+        value: { type: [string, number, boolean, object, array, 'null'] }
+    Setting:
+      type: object
+      required: [key, value, valueType, category, editable, updatedAt]
+      properties:
+        key: { type: string }
+        value: { type: [string, number, boolean, object, array, 'null'] }
+        valueType: { type: string, enum: [STRING, NUMBER, BOOLEAN, JSON] }
+        description: { type: [string, 'null'] }
+        category: { type: string }
+        editable: { type: boolean }
+        updatedAt: { type: string, format: date-time }
+    NotificationCreate:
+      type: object
+      required: [userId, title, type]
+      properties:
+        userId: { type: string, format: uuid }
+        title: { type: string, minLength: 1, maxLength: 200 }
+        message: { type: [string, 'null'], maxLength: 10000 }
+        type: { type: string, maxLength: 50 }
+        linkUrl: { type: [string, 'null'], format: uri-reference, maxLength: 500 }
+    Notification:
+      allOf:
+        - { $ref: '#/components/schemas/AuditFields' }
+        - { $ref: '#/components/schemas/NotificationCreate' }
+        - type: object
+          required: [read]
+          properties:
+            read: { type: boolean }
+            readAt: { type: [string, 'null'], format: date-time }
+    ContactMessageCreate:
+      type: object
+      additionalProperties: false
+      required: [name, email, message]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 200 }
+        email: { type: string, format: email, maxLength: 200 }
+        phone: { type: [string, 'null'], maxLength: 50 }
+        subject: { type: [string, 'null'], maxLength: 200 }
+        message: { type: string, minLength: 1, maxLength: 10000 }
+    ContactMessage:
+      allOf:
+        - { $ref: '#/components/schemas/AuditFields' }
+        - { $ref: '#/components/schemas/ContactMessageCreate' }
+        - type: object
+          required: [read]
+          properties:
+            read: { type: boolean }
+            readAt: { type: [string, 'null'], format: date-time }
+    Dashboard:
+      type: object
+      required: [counts, businessPlanStatusCounts, applicantStatusCounts, submissionSeries, generatedAt]
+      properties:
+        counts:
+          type: object
+          required: [businessPlans, openJobs, applicants, portfolioCompanies]
+          properties:
+            businessPlans: { type: integer, minimum: 0 }
+            openJobs: { type: integer, minimum: 0 }
+            applicants: { type: integer, minimum: 0 }
+            portfolioCompanies: { type: integer, minimum: 0 }
+        businessPlanStatusCounts: { type: object, additionalProperties: { type: integer, minimum: 0 } }
+        applicantStatusCounts: { type: object, additionalProperties: { type: integer, minimum: 0 } }
+        submissionSeries:
+          type: array
+          items:
+            type: object
+            required: [period, businessPlans, applications]
+            properties:
+              period: { type: string, format: date }
+              businessPlans: { type: integer, minimum: 0 }
+              applications: { type: integer, minimum: 0 }
+        generatedAt: { type: string, format: date-time }
+    PortfolioCompanyPage: { allOf: [{ $ref: '#/components/schemas/PageMeta' }, { type: object, required: [content], properties: { content: { type: array, items: { $ref: '#/components/schemas/PortfolioCompany' } } } }] }
+    InsightPage: { allOf: [{ $ref: '#/components/schemas/PageMeta' }, { type: object, required: [content], properties: { content: { type: array, items: { $ref: '#/components/schemas/Insight' } } } }] }
+    TeamMemberPage: { allOf: [{ $ref: '#/components/schemas/PageMeta' }, { type: object, required: [content], properties: { content: { type: array, items: { $ref: '#/components/schemas/TeamMember' } } } }] }
+    JobPage: { allOf: [{ $ref: '#/components/schemas/PageMeta' }, { type: object, required: [content], properties: { content: { type: array, items: { $ref: '#/components/schemas/Job' } } } }] }
+    BusinessPlanPage: { allOf: [{ $ref: '#/components/schemas/PageMeta' }, { type: object, required: [content], properties: { content: { type: array, items: { $ref: '#/components/schemas/BusinessPlan' } } } }] }
+    ApplicantPage: { allOf: [{ $ref: '#/components/schemas/PageMeta' }, { type: object, required: [content], properties: { content: { type: array, items: { $ref: '#/components/schemas/Applicant' } } } }] }
+    CmsPagePage: { allOf: [{ $ref: '#/components/schemas/PageMeta' }, { type: object, required: [content], properties: { content: { type: array, items: { $ref: '#/components/schemas/CmsPage' } } } }] }
+    MediaAssetPage: { allOf: [{ $ref: '#/components/schemas/PageMeta' }, { type: object, required: [content], properties: { content: { type: array, items: { $ref: '#/components/schemas/MediaAsset' } } } }] }
+    UserPage: { allOf: [{ $ref: '#/components/schemas/PageMeta' }, { type: object, required: [content], properties: { content: { type: array, items: { $ref: '#/components/schemas/User' } } } }] }
+    WorkflowEventPage: { allOf: [{ $ref: '#/components/schemas/PageMeta' }, { type: object, required: [content], properties: { content: { type: array, items: { $ref: '#/components/schemas/WorkflowEvent' } } } }] }
+    AuditEventPage: { allOf: [{ $ref: '#/components/schemas/PageMeta' }, { type: object, required: [content], properties: { content: { type: array, items: { $ref: '#/components/schemas/AuditEvent' } } } }] }
+    NotificationPage: { allOf: [{ $ref: '#/components/schemas/PageMeta' }, { type: object, required: [content], properties: { content: { type: array, items: { $ref: '#/components/schemas/Notification' } } } }] }
+    ContactMessagePage: { allOf: [{ $ref: '#/components/schemas/PageMeta' }, { type: object, required: [content], properties: { content: { type: array, items: { $ref: '#/components/schemas/ContactMessage' } } } }] }

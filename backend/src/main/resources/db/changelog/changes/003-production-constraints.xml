@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    <changeSet id="003-001-fk-indexes" author="iman">
+        <addColumn tableName="applicants">
+            <column name="cover_letter_path" type="VARCHAR(500)"/>
+            <column name="cover_letter_name" type="VARCHAR(255)"/>
+        </addColumn>
+        <createIndex tableName="role_permissions" indexName="idx_role_permissions_permission"><column name="permission_id"/></createIndex>
+        <createIndex tableName="user_roles" indexName="idx_user_roles_role"><column name="role_id"/></createIndex>
+        <createIndex tableName="business_plans" indexName="idx_bp_assigned"><column name="assigned_to_id"/></createIndex>
+        <createIndex tableName="business_plan_documents" indexName="idx_bpd_plan"><column name="business_plan_id"/></createIndex>
+        <createIndex tableName="business_plan_notes" indexName="idx_bpn_plan"><column name="business_plan_id"/></createIndex>
+        <createIndex tableName="business_plan_notes" indexName="idx_bpn_author"><column name="author_id"/></createIndex>
+        <createIndex tableName="business_plan_history" indexName="idx_bph_plan_created"><column name="business_plan_id"/><column name="created_at"/></createIndex>
+        <createIndex tableName="business_plan_history" indexName="idx_bph_changed_by"><column name="changed_by_id"/></createIndex>
+        <createIndex tableName="applicants" indexName="idx_applicants_email"><column name="email"/></createIndex>
+        <createIndex tableName="applicant_notes" indexName="idx_an_applicant_created"><column name="applicant_id"/><column name="created_at"/></createIndex>
+        <createIndex tableName="applicant_notes" indexName="idx_an_author"><column name="author_id"/></createIndex>
+        <createIndex tableName="applicant_activities" indexName="idx_aa_applicant_created"><column name="applicant_id"/><column name="created_at"/></createIndex>
+        <createIndex tableName="applicant_activities" indexName="idx_aa_changed_by"><column name="changed_by_id"/></createIndex>
+        <createIndex tableName="media_files" indexName="idx_media_uploaded_by"><column name="uploaded_by_id"/></createIndex>
+        <createIndex tableName="audit_logs" indexName="idx_audit_user"><column name="user_id"/></createIndex>
+        <createIndex tableName="audit_logs" indexName="idx_audit_module_action"><column name="module"/><column name="action"/></createIndex>
+        <createIndex tableName="notifications" indexName="idx_notifications_user_read"><column name="user_id"/><column name="is_read"/></createIndex>
+        <createIndex tableName="contact_messages" indexName="idx_contact_read_created"><column name="is_read"/><column name="created_at"/></createIndex>
+        <createIndex tableName="insights" indexName="idx_insights_status_date"><column name="status"/><column name="published_date"/></createIndex>
+        <createIndex tableName="portfolio_companies" indexName="idx_portfolio_status_order"><column name="status"/><column name="display_order"/></createIndex>
+        <createIndex tableName="team_members" indexName="idx_team_status_order"><column name="status"/><column name="display_order"/></createIndex>
+    </changeSet>
+    <changeSet id="003-002-check-constraints" author="iman">
+        <sql>ALTER TABLE business_plans ADD CONSTRAINT chk_bp_current_step CHECK (current_step IS NULL OR current_step BETWEEN 1 AND 10)</sql>
+        <sql>ALTER TABLE business_plans ADD CONSTRAINT chk_bp_team_size CHECK (team_size IS NULL OR team_size &gt;= 0)</sql>
+        <sql>ALTER TABLE jobs ADD CONSTRAINT chk_job_salary CHECK (salary_min IS NULL OR salary_max IS NULL OR salary_min &lt;= salary_max)</sql>
+        <sql>ALTER TABLE business_plan_documents ADD CONSTRAINT chk_bpd_size CHECK (file_size IS NULL OR file_size &gt;= 0)</sql>
+        <sql>ALTER TABLE media_files ADD CONSTRAINT chk_media_size CHECK (file_size IS NULL OR file_size &gt;= 0)</sql>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,627 @@
+.workflow-page,
+.job-detail-page {
+  --workflow-ink: #081a31;
+  --workflow-muted: #66717d;
+  --workflow-line: #dfe4e7;
+  --workflow-soft: #f4f6f5;
+  background: #f7f8f6;
+}
+
+.workflow-header {
+  padding: 48px 24px 42px;
+  background: #fff;
+  border-bottom: 1px solid var(--workflow-line);
+}
+
+.workflow-header__inner,
+.job-hero__inner {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+}
+
+.workflow-header__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.workflow-header__inner h2 {
+  margin-top: 10px;
+}
+
+.workflow-header__inner > p:last-child {
+  max-width: 640px;
+  margin-top: 13px;
+  line-height: 1.7;
+}
+
+.workflow-header__inner .workflow-back {
+  align-self: flex-start;
+  margin: -12px 0 18px;
+}
+
+.workflow-back {
+  padding-left: 0 !important;
+  color: var(--workflow-muted) !important;
+  font-size: 12px !important;
+}
+
+.workflow-section {
+  padding-top: 44px !important;
+  padding-bottom: 90px !important;
+}
+
+.bp-progress {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: min(100%, 940px);
+  margin: 0 auto 34px;
+  position: relative;
+}
+
+.bp-progress::before {
+  content: "";
+  position: absolute;
+  top: 22px;
+  right: 12%;
+  left: 12%;
+  height: 1px;
+  background: #cfd7dc;
+}
+
+.bp-progress a {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+  text-align: center;
+  text-decoration: none;
+}
+
+.bp-progress__icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  color: #fff;
+  background: var(--workflow-ink);
+  border: 6px solid #f7f8f6;
+  box-sizing: content-box;
+}
+
+.bp-progress__icon svg {
+  font-size: 18px;
+}
+
+.bp-progress b,
+.bp-progress small {
+  display: block;
+}
+
+.bp-progress b {
+  font-size: 12px;
+  letter-spacing: .02em;
+}
+
+.bp-progress b i {
+  font-style: normal;
+}
+
+.bp-progress small {
+  margin-top: 3px;
+  color: var(--workflow-muted);
+  font-size: 10px;
+}
+
+.workflow-layout,
+.application-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  gap: 24px;
+  width: min(100%, 1120px);
+  margin: auto;
+  align-items: start;
+}
+
+.application-layout {
+  width: min(100%, 1040px);
+}
+
+.workflow-form {
+  padding: clamp(26px, 4vw, 48px);
+  border-color: #dce1e4 !important;
+  box-shadow: 0 14px 42px rgba(8, 26, 49, .045);
+}
+
+.workflow-form-section {
+  scroll-margin-top: 95px;
+  padding-bottom: 40px;
+  margin-bottom: 38px;
+  border-bottom: 1px solid var(--workflow-line);
+}
+
+.workflow-form-section__head {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 14px;
+  margin-bottom: 25px;
+}
+
+.workflow-form-section__head > span {
+  padding-top: 6px;
+  color: #a37b43;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.workflow-form-section__head h3 {
+  margin-bottom: 6px;
+  font-size: clamp(1.5rem, 2vw, 1.95rem);
+}
+
+.workflow-form-section__head p {
+  font-size: 13px;
+}
+
+.workflow-field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 17px;
+}
+
+.workflow-field-grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.workflow-form .MuiInputBase-root {
+  min-height: 45px;
+}
+
+.workflow-form textarea {
+  line-height: 1.65;
+}
+
+.file-drop {
+  min-height: 152px !important;
+  padding: 25px !important;
+  border: 1px dashed #aebbc5 !important;
+  color: var(--workflow-ink) !important;
+  background: #fbfcfb !important;
+}
+
+.file-drop:hover {
+  border-color: var(--workflow-ink) !important;
+  background: #f5f7f7 !important;
+}
+
+.file-drop--error {
+  border-color: #d32f2f !important;
+}
+
+.file-drop > svg {
+  margin-right: 20px;
+  color: #9a7543;
+  font-size: 36px;
+}
+
+.file-drop > span {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.file-drop b {
+  font-size: 14px;
+}
+
+.file-drop small {
+  margin-top: 5px;
+  color: var(--workflow-muted);
+  font-weight: 400;
+}
+
+.file-drop em {
+  margin-top: 13px;
+  color: #154d79;
+  font-size: 12px;
+  font-style: normal;
+  text-decoration: underline;
+}
+
+.file-list {
+  gap: 7px !important;
+  padding: 12px 14px;
+  border: solid var(--workflow-line);
+  border-width: 0 1px 1px;
+  background: #fff;
+}
+
+.file-list p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-wrap: anywhere;
+}
+
+.file-list svg {
+  color: #3e7454;
+  font-size: 16px;
+}
+
+.file-list small {
+  color: var(--workflow-muted);
+}
+
+.field-error {
+  margin: 5px 14px 0 !important;
+  color: #d32f2f;
+  font-size: 12px !important;
+}
+
+.workflow-submit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.workflow-submit .MuiButton-root {
+  min-width: 220px;
+}
+
+.workflow-summary {
+  position: sticky;
+  top: 94px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 26px;
+  border-top: 3px solid var(--workflow-ink) !important;
+  background: #fff;
+}
+
+.workflow-summary h3 {
+  margin: -7px 0 7px;
+  font-size: 1.65rem;
+}
+
+.summary-point {
+  display: grid;
+  grid-template-columns: 25px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.summary-point > span {
+  display: grid;
+  width: 23px;
+  height: 23px;
+  place-items: center;
+  color: #fff;
+  background: var(--workflow-ink);
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.summary-point p {
+  color: #53606d;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.summary-note {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  color: #566474;
+  background: var(--workflow-soft);
+  border-left: 2px solid #a78350;
+}
+
+.summary-note svg {
+  flex: 0 0 auto;
+  color: #9a7543;
+  font-size: 19px;
+}
+
+.privacy-check {
+  padding: 16px;
+  background: var(--workflow-soft);
+  border: 1px solid var(--workflow-line);
+}
+
+.privacy-check .MuiFormControlLabel-root {
+  align-items: flex-start;
+  margin: 0;
+}
+
+.privacy-check .MuiCheckbox-root {
+  padding-top: 0;
+}
+
+.privacy-check a {
+  color: #164f7d;
+}
+
+.application-summary {
+  gap: 10px;
+}
+
+.application-summary .summary-note {
+  margin-top: 13px;
+}
+
+.job-hero {
+  padding: 48px 24px 52px;
+  background:
+    linear-gradient(110deg, rgba(255, 255, 255, .98) 25%, rgba(247, 249, 248, .92)),
+    radial-gradient(circle at 85% 0, #d7e2e3, transparent 38%);
+  border-bottom: 1px solid var(--workflow-line);
+}
+
+.job-hero__inner h1 {
+  max-width: 820px;
+  margin: 14px 0 18px;
+  font-size: clamp(2.7rem, 5vw, 4.7rem);
+}
+
+.job-hero__summary {
+  max-width: 760px;
+  color: #556372;
+  font-size: 17px !important;
+  line-height: 1.7 !important;
+}
+
+.job-meta {
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 27px;
+}
+
+.job-meta .MuiChip-root {
+  height: 31px;
+  background: rgba(255, 255, 255, .7);
+  border-color: #cbd4da;
+  color: #3f4d5a;
+  font-size: 11px;
+}
+
+.job-meta .MuiChip-icon {
+  margin-left: 9px;
+  font-size: 16px;
+}
+
+.job-content-section {
+  padding-top: 62px !important;
+}
+
+.job-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 310px;
+  gap: clamp(45px, 7vw, 90px);
+  width: min(100%, 1080px);
+  margin: auto;
+  align-items: start;
+}
+
+.job-copy-section {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 18px;
+  padding-bottom: 48px;
+  margin-bottom: 42px;
+  border-bottom: 1px solid var(--workflow-line);
+}
+
+.job-copy-section > span {
+  padding-top: 7px;
+  color: #a27c47;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .1em;
+}
+
+.job-copy-section h3 {
+  margin-bottom: 17px;
+}
+
+.job-copy-section .rich-text {
+  color: #4c5966;
+  line-height: 1.9 !important;
+}
+
+.job-apply-card {
+  position: sticky;
+  top: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  padding: 30px;
+  border-top: 3px solid var(--workflow-ink) !important;
+  box-shadow: 0 14px 38px rgba(8, 26, 49, .06);
+}
+
+.job-apply-card h3 {
+  font-size: 1.9rem;
+}
+
+.job-apply-card > p {
+  line-height: 1.65;
+}
+
+.job-apply-card .MuiButton-root {
+  margin-top: 5px;
+}
+
+.job-apply-card .MuiDivider-root {
+  margin: 5px 0 0;
+}
+
+.job-share {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 25px;
+  background: #eef2f1;
+}
+
+.job-share > p {
+  grid-column: 1;
+}
+
+.job-share .MuiStack-root {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+.job-share .MuiIconButton-root {
+  color: var(--workflow-ink);
+  background: #fff;
+  border: 1px solid #d6dde1;
+}
+
+@media (max-width: 900px) {
+  .workflow-layout,
+  .application-layout,
+  .job-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .workflow-summary,
+  .job-apply-card {
+    position: static;
+  }
+
+  .workflow-summary {
+    grid-row: 1;
+  }
+
+  .application-summary {
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 650px) {
+  .workflow-header,
+  .job-hero {
+    padding: 34px 20px;
+  }
+
+  .workflow-header__inner {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .workflow-header__inner .workflow-back {
+    margin-top: -4px;
+  }
+
+  .workflow-section {
+    padding-top: 24px !important;
+    padding-bottom: 55px !important;
+  }
+
+  .bp-progress {
+    grid-template-columns: repeat(4, 1fr);
+    margin-bottom: 22px;
+  }
+
+  .bp-progress::before {
+    top: 18px;
+  }
+
+  .bp-progress__icon {
+    width: 35px;
+    height: 35px;
+    border-width: 4px;
+  }
+
+  .bp-progress__icon svg {
+    font-size: 15px;
+  }
+
+  .bp-progress small,
+  .bp-progress b i {
+    display: none;
+  }
+
+  .bp-progress b {
+    font-size: 10px;
+  }
+
+  .workflow-form {
+    padding: 24px 19px;
+  }
+
+  .workflow-field-grid,
+  .workflow-field-grid--three {
+    grid-template-columns: 1fr;
+  }
+
+  .workflow-form-section {
+    padding-bottom: 30px;
+    margin-bottom: 29px;
+  }
+
+  .workflow-form-section__head {
+    grid-template-columns: 29px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .file-drop {
+    min-height: 165px !important;
+    flex-direction: column;
+  }
+
+  .file-drop > svg {
+    margin: 0 0 12px;
+  }
+
+  .file-drop > span {
+    align-items: center;
+    text-align: center;
+  }
+
+  .workflow-submit {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .workflow-submit .MuiButton-root {
+    width: 100%;
+  }
+
+  .job-hero__inner h1 {
+    font-size: 2.7rem;
+  }
+
+  .job-hero__summary {
+    font-size: 15px !important;
+  }
+
+  .job-content-section {
+    padding-top: 42px !important;
+  }
+
+  .job-copy-section {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .job-share {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .job-share .MuiStack-root {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: 10px;
+  }
+}
