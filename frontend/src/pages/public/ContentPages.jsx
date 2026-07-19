@@ -144,10 +144,13 @@ export function InsightDetailPage() {
   )
 }
 
+/** Flip to true when Team LinkedIn profile links should be clickable again. */
+const TEAM_LINKEDIN_LINKS_ENABLED = false
+
 export function TeamPage() {
   usePageTitle('Team')
   const query = useQuery({ queryKey: ['team'], queryFn: () => getPage('/public/team'), select: (items) => items || [] })
-  return <><PageHero eyebrow="Team" title="Experience shaped by building." text="Investors and operators united by curiosity, conviction and care." /><Section><QueryState query={query} empty="Team profiles are being prepared.">{(items) => <Box className="four-grid">{items.map((item) => <Box className="team-card" key={item.id}><Box className="team-photo" sx={{ backgroundImage: item.imageUrl ? `url(${item.imageUrl})` : undefined }} /><Stack direction="row" sx={{ justifyContent: 'space-between' }}><Box><Typography variant="h4">{item.fullName}</Typography><Typography color="text.secondary">{item.role}</Typography></Box>{item.linkedinUrl && <MuiLink aria-label={`${item.fullName} on LinkedIn`} href={item.linkedinUrl}><LinkedIn /></MuiLink>}</Stack></Box>)}</Box>}</QueryState></Section></>
+  return <><PageHero eyebrow="Team" title="Experience shaped by building." text="Investors and operators united by curiosity, conviction and care." /><Section><QueryState query={query} empty="Team profiles are being prepared.">{(items) => <Box className="four-grid">{items.map((item) => <Box className="team-card" key={item.id}><Box className="team-photo" sx={{ backgroundImage: item.imageUrl ? `url(${item.imageUrl})` : undefined }} /><Stack direction="row" sx={{ justifyContent: 'space-between' }}><Box><Typography variant="h4">{item.fullName}</Typography><Typography color="text.secondary">{item.role}</Typography></Box>{TEAM_LINKEDIN_LINKS_ENABLED && item.linkedinUrl && <MuiLink aria-label={`${item.fullName} on LinkedIn`} href={item.linkedinUrl} target="_blank" rel="noreferrer"><LinkedIn /></MuiLink>}</Stack></Box>)}</Box>}</QueryState></Section></>
 }
 
 const isNewJob = (datePosted) => {
