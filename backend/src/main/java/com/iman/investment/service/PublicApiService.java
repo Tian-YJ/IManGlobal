@@ -133,6 +133,9 @@ public class PublicApiService {
 
     @Transactional
     public Map<String, Object> savePlan(BusinessPlanDto.Request request, boolean submit, List<MultipartFile> documents) {
+        if (submit && !hasDocuments(documents)) {
+            throw new BadRequestException("At least one supporting document is required");
+        }
         BusinessPlan plan = copyPlan(new BusinessPlan(), request);
         plan.setStatus(submit ? BusinessPlanStatus.SUBMITTED : BusinessPlanStatus.DRAFT);
         plan = businessPlanRepository.save(plan);
@@ -154,7 +157,11 @@ public class PublicApiService {
             throw new BadRequestException("Draft cannot be updated");
         }
         copyPlan(plan, request);
+        storePlanDocuments(plan, documents);
         if (submit) {
+            if (documentRepository.countByBusinessPlan_Id(plan.getId()) == 0) {
+                throw new BadRequestException("At least one supporting document is required");
+            }
             plan.setStatus(BusinessPlanStatus.SUBMITTED);
             historyRepository.save(BusinessPlanHistory.builder().businessPlan(plan).fromStatus(BusinessPlanStatus.DRAFT)
                     .toStatus(BusinessPlanStatus.SUBMITTED).comment("Business plan submitted").build());
@@ -162,7 +169,6 @@ public class PublicApiService {
             plan.setStatus(BusinessPlanStatus.DRAFT);
         }
         businessPlanRepository.save(plan);
-        storePlanDocuments(plan, documents);
         return mapper.businessPlan(plan);
     }
 
@@ -196,11 +202,16 @@ public class PublicApiService {
         if (documents == null) return;
         for (MultipartFile file : documents) {
             if (file == null || file.isEmpty()) continue;
-            files.validateDocument(file, Set.of("pdf", "ppt", "pptx", "docx"), 50 * 1024 * 1024L);
+            files.validateDocument(file, Set.of("pdf", "ppt", "pptx", "doc", "docx"), 50 * 1024 * 1024L);
             String path = files.storeFile(file, "business-plans");
             documentRepository.save(BusinessPlanDocument.builder().businessPlan(plan).fileName(path.substring(path.lastIndexOf('/') + 1))
                     .originalName(file.getOriginalFilename()).filePath(path).fileType(files.extension(file.getOriginalFilename()).toUpperCase(Locale.ROOT))
                     .fileSize(file.getSize()).mimeType(file.getContentType()).build());
         }
+    }
+
+    private boolean hasDocuments(List<MultipartFile> documents) {
+        if (documents == null || documents.isEmpty()) return false;
+        return documents.stream().anyMatch(file -> file != null && !file.isEmpty());
     }
 }

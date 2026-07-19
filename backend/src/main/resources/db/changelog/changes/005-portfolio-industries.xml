@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="portfolio-001-enterprise-image" author="iman">
+        <update tableName="portfolio_companies">
+            <column name="image_url" value="/images/portfolio-enterprise.jpg"/>
+            <where>id = '44444444-4444-4444-4444-444444444005'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="portfolio-002-crypto-physical-ai" author="iman">
+        <insert tableName="portfolio_companies">
+            <column name="id" value="44444444-4444-4444-4444-444444444007"/>
+            <column name="name" value="ChainLedger"/>
+            <column name="industry" value="Crypto"/>
+            <column name="description" value="Institutional-grade crypto infrastructure for trading, custody and on-chain settlement"/>
+            <column name="image_url" value="/images/portfolio-crypto.jpg"/>
+            <column name="website" value="https://example.com"/>
+            <column name="is_featured" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="7"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="portfolio_companies">
+            <column name="id" value="44444444-4444-4444-4444-444444444008"/>
+            <column name="name" value="Aether Robotics"/>
+            <column name="industry" value="Physical AI"/>
+            <column name="description" value="Physical AI software and hardware for autonomous robots and industrial perception systems"/>
+            <column name="image_url" value="/images/portfolio-physical-ai.jpg"/>
+            <column name="website" value="https://example.com"/>
+            <column name="is_featured" valueBoolean="true"/>
+            <column name="display_order" valueNumeric="8"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

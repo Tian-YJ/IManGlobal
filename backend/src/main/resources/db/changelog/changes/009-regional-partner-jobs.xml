@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="careers-004-regional-strategy-partners" author="iman">
+        <insert tableName="jobs">
+            <column name="id" value="66666666-6666-6666-6666-666666666008"/>
+            <column name="title" value="Partner — Regional Strategy &amp; Investment Planning (North America)"/>
+            <column name="department" value="Partnerships"/>
+            <column name="location" value="North America · Hybrid / Remote"/>
+            <column name="type" value="FULL_TIME"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="slug" value="partner-regional-strategy-north-america"/>
+            <column name="date_posted" valueDate="2026-06-01"/>
+            <column name="experience" value="10+ years"/>
+            <column name="education" value="Bachelor's required; advanced degree preferred"/>
+            <column name="meta_title" value="Partner · North America Strategy &amp; Investment Planning · IMan Investment"/>
+            <column name="meta_description" value="Lead North America regional strategy, policy-aware opportunity mapping and investment planning for IMan Investment."/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="description"><![CDATA[IMan Investment is appointing a Partner for Regional Strategy & Investment Planning covering North America. You will interpret federal, state and municipal policy environments, identify development opportunities, and translate them into actionable investment theses, partnership pathways and capital allocation priorities.
+
+This Partner-level mandate combines public-policy fluency with investment judgement — shaping how IMan engages founders, corporates and institutions across the United States and Canada.]]></column>
+            <column name="responsibilities"><![CDATA[• Own IMan’s North America regional strategy and multi-year investment planning agenda
+• Monitor government policy, industrial incentives, trade frameworks and regulatory shifts that create investable opportunities
+• Map sector theses (AI, healthcare, climate, fintech, advanced manufacturing) against regional policy catalysts
+• Originate equity investment and strategic partnership opportunities with early-stage and growth companies
+• Build relationships with economic development agencies, ecosystem builders and institutional stakeholders
+• Produce regional opportunity briefs and recommendations for the investment committee and firm leadership
+• Coordinate with Hong Kong and New York teams on cross-border capital, market entry and co-investment paths
+• Represent IMan at selected policy, industry and capital forums across North America]]></column>
+            <column name="requirements"><![CDATA[• 10+ years in venture capital, private equity, corporate strategy, public policy / economic development, or related Partner-track roles
+• Demonstrated ability to convert policy and market context into concrete investment or partnership recommendations
+• Deep North America network across founders, corporates, advisors and/or government-adjacent institutions
+• Strong written strategy materials and board-level communication skills
+• Comfort operating as a senior remote / hybrid leader with accountability for regional outcomes
+• Bachelor’s degree required; MBA, MPP or equivalent advanced degree preferred
+• Prior US or Canada market leadership experience strongly preferred]]></column>
+            <column name="benefits"><![CDATA[• Partner-level compensation with performance and carried / bonus participation as applicable
+• Hybrid or remote flexibility across North America
+• Mandate ownership for a core global region
+• Direct partnership with firm leadership on capital allocation and platform strategy
+• Travel budget for regional coverage and cross-border collaboration
+• Opportunity to shape IMan’s long-term North America presence]]></column>
+        </insert>
+
+        <insert tableName="jobs">
+            <column name="id" value="66666666-6666-6666-6666-666666666009"/>
+            <column name="title" value="Partner — Regional Strategy &amp; Investment Planning (Middle East)"/>
+            <column name="department" value="Partnerships"/>
+            <column name="location" value="Middle East · Hybrid / Remote"/>
+            <column name="type" value="FULL_TIME"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="slug" value="partner-regional-strategy-middle-east"/>
+            <column name="date_posted" valueDate="2026-06-01"/>
+            <column name="experience" value="10+ years"/>
+            <column name="education" value="Bachelor's required; advanced degree preferred"/>
+            <column name="meta_title" value="Partner · Middle East Strategy &amp; Investment Planning · IMan Investment"/>
+            <column name="meta_description" value="Lead Middle East regional strategy under evolving government and diversification agendas for IMan Investment."/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="description"><![CDATA[IMan Investment is appointing a Partner for Regional Strategy & Investment Planning covering the Middle East. You will navigate national diversification agendas, sovereign and quasi-sovereign ecosystems, and regulatory frameworks to identify high-conviction development opportunities across technology, energy transition, logistics, fintech and related themes.
+
+The role requires a Partner who can operate with cultural fluency, policy awareness and investment discipline across GCC markets and broader Middle East corridors.]]></column>
+            <column name="responsibilities"><![CDATA[• Define and lead IMan’s Middle East regional strategy and investment planning roadmap
+• Analyse government visions, incentive programmes, free-zone frameworks and sector priorities for opportunity signals
+• Identify equity investment, co-investment and strategic partnership pathways with regional champions and global entrants
+• Engage sovereign-linked entities, family offices, accelerators and corporate ventures where relevant
+• Prepare regional theses, risk assessments and investment recommendations for firm leadership
+• Support founders seeking Middle East market entry or capital relationships through IMan’s network
+• Coordinate with Asia Pacific and North America teams on cross-border structuring and partnership design
+• Represent IMan at key regional forums while maintaining rigorous opportunity filtering]]></column>
+            <column name="requirements"><![CDATA[• 10+ years across investing, corporate development, government relations / economic strategy, or regional Partner roles
+• Proven experience interpreting Middle East policy and institutional environments into commercial outcomes
+• Established relationships across one or more GCC markets preferred
+• Excellent judgement on geopolitical, regulatory and counterparty risk
+• Strong English communication; Arabic language ability is a significant advantage
+• Bachelor’s degree required; advanced degree preferred
+• Willingness to travel within the region and collaborate across global time zones]]></column>
+            <column name="benefits"><![CDATA[• Partner-level compensation package with performance alignment
+• Hybrid / remote flexibility with regional travel expectations
+• Ownership of IMan’s Middle East strategy platform
+• Access to cross-border deal flow and Asia–Gulf connectivity
+• Professional development and relationship-building support
+• Opportunity to build a durable regional franchise for the firm]]></column>
+        </insert>
+
+        <insert tableName="jobs">
+            <column name="id" value="66666666-6666-6666-6666-666666666010"/>
+            <column name="title" value="Partner — Regional Strategy &amp; Investment Planning (Southeast Asia)"/>
+            <column name="department" value="Partnerships"/>
+            <column name="location" value="Southeast Asia · Hybrid / Remote"/>
+            <column name="type" value="FULL_TIME"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="slug" value="partner-regional-strategy-southeast-asia"/>
+            <column name="date_posted" valueDate="2026-06-01"/>
+            <column name="experience" value="10+ years"/>
+            <column name="education" value="Bachelor's required; advanced degree preferred"/>
+            <column name="meta_title" value="Partner · Southeast Asia Strategy &amp; Investment Planning · IMan Investment"/>
+            <column name="meta_description" value="Lead Southeast Asia regional strategy and policy-informed investment planning for IMan Investment."/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="description"><![CDATA[IMan Investment is appointing a Partner for Regional Strategy & Investment Planning covering Southeast Asia. You will work across ASEAN policy environments, digital economy agendas and industrial development programmes to uncover investment and strategic partnership opportunities for early-stage and growth companies.
+
+Based preferably in Singapore or another major ASEAN hub — with hybrid / remote flexibility — you will connect regional government and market dynamics to IMan’s Asia Pacific investment platform.]]></column>
+            <column name="responsibilities"><![CDATA[• Own Southeast Asia regional strategy and investment planning for IMan Investment
+• Track ASEAN policy, digitalisation, infrastructure, fintech regulation and industrial incentive programmes
+• Translate government and market catalysts into sector theses and opportunity pipelines
+• Source equity investment and strategic cooperation opportunities across Singapore, Indonesia, Vietnam, Thailand, Malaysia and related markets
+• Cultivate relationships with founders, corporates, development institutions and ecosystem partners
+• Deliver clear regional briefs and investment recommendations to Partners and the investment committee
+• Collaborate closely with Hong Kong leadership on capital allocation and cross-border support for portfolio companies
+• Represent IMan in regional strategy dialogues while maintaining high diligence standards]]></column>
+            <column name="requirements"><![CDATA[• 10+ years in venture capital, growth investing, corporate strategy, public policy / market development, or Partner-level roles in Southeast Asia
+• Deep understanding of ASEAN market heterogeneity and policy-driven opportunity formation
+• Strong founder and institutional network in at least two major Southeast Asian markets
+• Excellent written and verbal English; Bahasa Indonesia, Vietnamese, Thai or Mandarin a plus
+• Ability to lead remotely / hybrid with frequent regional travel
+• Bachelor’s degree required; MBA or public policy background preferred
+• Experience bridging Southeast Asia with Greater China or global capital is highly valued]]></column>
+            <column name="benefits"><![CDATA[• Partner-level compensation with performance participation
+• Hybrid / remote flexibility across Southeast Asia hubs
+• Clear ownership of a priority growth region for the firm
+• Close collaboration with Hong Kong investment leadership
+• Travel and ecosystem engagement support
+• Opportunity to institutionalise IMan’s long-term ASEAN presence]]></column>
+        </insert>
+
+        <insert tableName="jobs">
+            <column name="id" value="66666666-6666-6666-6666-666666666011"/>
+            <column name="title" value="Partner — Regional Strategy &amp; Investment Planning (Europe)"/>
+            <column name="department" value="Partnerships"/>
+            <column name="location" value="Europe · Hybrid / Remote"/>
+            <column name="type" value="FULL_TIME"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="slug" value="partner-regional-strategy-europe"/>
+            <column name="date_posted" valueDate="2026-06-01"/>
+            <column name="experience" value="10+ years"/>
+            <column name="education" value="Bachelor's required; advanced degree preferred"/>
+            <column name="meta_title" value="Partner · Europe Strategy &amp; Investment Planning · IMan Investment"/>
+            <column name="meta_description" value="Lead Europe regional strategy under EU and national policy frameworks for IMan Investment."/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="description"><![CDATA[IMan Investment is appointing a Partner for Regional Strategy & Investment Planning covering Europe. You will analyse EU and national policy environments — including industrial strategy, climate regulation, digital markets and innovation funding — to identify development opportunities and shape IMan’s European investment and partnership agenda.
+
+This Partner role suits a senior leader who can connect policy complexity with practical capital deployment and cross-border collaboration between Europe and Asia.]]></column>
+            <column name="responsibilities"><![CDATA[• Lead IMan’s Europe regional strategy and multi-year investment planning
+• Interpret EU and member-state policy, funding instruments and regulatory regimes for opportunity creation
+• Develop theses across deep tech, climate, healthcare, enterprise software and related European strengths
+• Originate equity investment and strategic partnership opportunities with European founders and scale-ups
+• Engage innovation agencies, corporates, funds and institutional stakeholders across priority markets
+• Prepare regional strategy papers and investment recommendations for firm leadership
+• Coordinate with Hong Kong and New York teams on Asia–Europe and US–Europe corridor opportunities
+• Represent IMan selectively across European capital and policy forums]]></column>
+            <column name="requirements"><![CDATA[• 10+ years in venture capital, growth equity, corporate strategy, EU / public affairs adjacent roles, or Partner-level investing
+• Ability to convert European policy and market structure into investable theses
+• Strong network across at least two major European markets (e.g. UK, France, Germany, Nordics, Netherlands)
+• Excellent English; additional European languages strongly preferred
+• Comfortable with hybrid / remote leadership and cross-border travel
+• Bachelor’s degree required; advanced degree preferred
+• Experience with Asia–Europe capital or market linkages is a plus]]></column>
+            <column name="benefits"><![CDATA[• Partner-level compensation with performance alignment
+• Hybrid / remote flexibility across European locations
+• Ownership of Europe as a core regional platform
+• Cross-border collaboration with Asia Pacific and North America teams
+• Travel and professional network support
+• Opportunity to define IMan’s enduring European strategy]]></column>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

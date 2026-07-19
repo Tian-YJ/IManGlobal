@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="careers-001-enrich-existing-jobs" author="iman">
+        <update tableName="jobs">
+            <column name="title" value="Investment Associate"/>
+            <column name="department" value="Investment"/>
+            <column name="location" value="Hong Kong"/>
+            <column name="meta_title" value="Investment Associate · IMan Investment"/>
+            <column name="meta_description" value="Evaluate early-stage opportunities and partner with founders across Asia Pacific."/>
+            <column name="description"><![CDATA[IMan Investment is seeking an Investment Associate to join our Hong Kong investment team. You will work closely with Partners and senior investors to source, evaluate and support early-stage companies with global ambition.
+
+This role suits someone who enjoys rigorous diligence, clear writing and practical partnership with founders — from first conversation through portfolio support.]]></column>
+            <column name="responsibilities"><![CDATA[• Source and screen early-stage investment opportunities across Enterprise AI, healthcare, fintech, climate and related themes
+• Build financial models, market maps and investment memos for internal investment committee review
+• Lead workstreams in commercial, product and competitive diligence
+• Coordinate expert calls, customer references and founder meetings
+• Support portfolio companies with hiring intros, customer access and follow-on fundraising preparation
+• Track sector developments and contribute to internal research notes]]></column>
+            <column name="requirements"><![CDATA[• 2–5 years of experience in venture capital, private equity, investment banking, management consulting or a high-growth operating role
+• Strong financial modelling and written communication skills
+• Comfort operating across Hong Kong, Greater China and broader Asia Pacific contexts
+• Demonstrated intellectual curiosity and sound commercial judgement
+• MBA or equivalent experience preferred; undergraduate degree in a quantitative or business discipline required
+• Fluency in English required; Mandarin a strong plus]]></column>
+            <column name="benefits"><![CDATA[• Competitive base salary and performance-linked bonus
+• Medical insurance and wellness support
+• Exposure to Partners on live deals from day one
+• Professional development budget and conference access
+• Collaborative Hong Kong office with flexible hybrid arrangements]]></column>
+            <column name="experience" value="2–5 years"/>
+            <column name="education" value="Bachelor's required; MBA preferred"/>
+            <where>id = '66666666-6666-6666-6666-666666666001'</where>
+        </update>
+
+        <update tableName="jobs">
+            <column name="title" value="Investment Analyst"/>
+            <column name="department" value="Investment"/>
+            <column name="location" value="Hong Kong"/>
+            <column name="meta_title" value="Investment Analyst · IMan Investment"/>
+            <column name="meta_description" value="Support research, modelling and deal execution for IMan’s early-stage investment team."/>
+            <column name="description"><![CDATA[As an Investment Analyst in Hong Kong, you will support the investment team with research, financial analysis and deal execution. This is a high-learning role for someone early in their career who wants exposure to venture investing across Asia Pacific.
+
+You will work on live opportunities, contribute to memos and develop a structured view of markets, products and founding teams.]]></column>
+            <column name="responsibilities"><![CDATA[• Conduct company, sector and competitor research for active deal pipelines
+• Build and maintain financial models, unit-economics analyses and diligence trackers
+• Prepare slides and supporting materials for partner meetings and investment committee
+• Assist with call notes, data rooms and follow-up diligence requests
+• Monitor portfolio company updates and prepare internal reporting summaries
+• Contribute to thematic research that informs IMan’s investment focus areas]]></column>
+            <column name="requirements"><![CDATA[• 0–2 years of experience in finance, consulting, startups or related analytical roles (internships considered)
+• Bachelor’s degree in finance, economics, engineering, computer science or a related field
+• Strong Excel / modelling fundamentals and clear written English
+• High ownership, attention to detail and willingness to learn quickly
+• Interest in early-stage technology and venture capital
+• Mandarin proficiency is an advantage]]></column>
+            <column name="benefits"><![CDATA[• Competitive analyst compensation
+• Structured mentorship from Associates and Partners
+• Direct exposure to diligence and investment committee processes
+• Learning budget for courses and industry events
+• Medical coverage and hybrid Hong Kong working model]]></column>
+            <column name="experience" value="0–2 years"/>
+            <column name="education" value="Bachelor's required"/>
+            <where>id = '66666666-6666-6666-6666-666666666002'</where>
+        </update>
+
+        <update tableName="jobs">
+            <column name="title" value="Finance &amp; Operations Manager"/>
+            <column name="department" value="Operations"/>
+            <column name="location" value="Hong Kong"/>
+            <column name="meta_title" value="Finance &amp; Operations Manager · IMan Investment"/>
+            <column name="meta_description" value="Lead fund finance, LP reporting and day-to-day operations for IMan Investment."/>
+            <column name="description"><![CDATA[IMan Investment is hiring a Finance & Operations Manager to own fund accounting, reporting and the operating cadence of our Hong Kong platform. You will partner closely with the investment team, administrators and advisors to ensure accurate books, clean LP communication and disciplined internal controls.
+
+This role is ideal for a finance professional who enjoys both precision and practical problem-solving in a lean investment firm.]]></column>
+            <column name="responsibilities"><![CDATA[• Oversee fund accounting workflows with administrators and auditors
+• Prepare and review LP reporting packages, capital calls and distribution notices
+• Manage budgeting, cash forecasting and vendor relationships for the management company
+• Support compliance calendars, KYC/AML coordination and policy documentation
+• Improve internal operating processes spanning finance, HR administration and office operations
+• Partner with leadership on board materials and ad hoc financial analysis]]></column>
+            <column name="requirements"><![CDATA[• 5+ years of experience in fund operations, PE/VC finance, audit or related roles
+• CPA, ACCA, CFA or equivalent professional qualification strongly preferred
+• Hands-on familiarity with fund accounting concepts and LP reporting standards
+• High integrity, organised working style and clear stakeholder communication
+• Experience in Hong Kong or Asia Pacific fund environments preferred
+• Fluent English; Mandarin a plus]]></column>
+            <column name="benefits"><![CDATA[• Competitive managerial compensation package
+• Medical insurance and annual leave above statutory minimums
+• Close partnership with senior leadership
+• Opportunity to shape operating systems as the firm scales
+• Hybrid work flexibility in Hong Kong]]></column>
+            <column name="experience" value="5+ years"/>
+            <column name="education" value="CPA / ACCA / CFA preferred"/>
+            <where>id = '66666666-6666-6666-6666-666666666003'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="careers-002-new-ib-roles" author="iman">
+        <insert tableName="jobs">
+            <column name="id" value="66666666-6666-6666-6666-666666666004"/>
+            <column name="title" value="Investment Banking Analyst"/>
+            <column name="department" value="Investment Banking"/>
+            <column name="location" value="New York, United States"/>
+            <column name="type" value="FULL_TIME"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="slug" value="investment-banking-analyst-new-york"/>
+            <column name="date_posted" valueDate="2026-05-01"/>
+            <column name="experience" value="0–3 years"/>
+            <column name="education" value="Bachelor's required"/>
+            <column name="meta_title" value="Investment Banking Analyst · New York · IMan Investment"/>
+            <column name="meta_description" value="Join IMan’s New York investment banking team as an Analyst supporting M&amp;A and capital markets execution."/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="description"><![CDATA[IMan Investment is expanding its cross-border advisory capabilities and is hiring an Investment Banking Analyst in New York. You will support live M&A, strategic financing and cross-border transaction workstreams connecting North America and Asia Pacific clients.
+
+This role is designed for analytically strong professionals who want intensive deal exposure, rigorous training and collaboration with senior bankers across New York and Hong Kong.]]></column>
+            <column name="responsibilities"><![CDATA[• Build and maintain valuation materials including DCF, trading comps and precedent transactions
+• Prepare pitch books, confidential information memoranda and management presentation materials
+• Support due diligence coordination, data-room organisation and buyer/seller Q&A processes
+• Perform industry research and financial analysis for active mandates and new business pitches
+• Assist with process management across NDAs, teasers, management meetings and bid tracking
+• Collaborate with Hong Kong colleagues on cross-border Asia–US transaction workflows
+• Maintain high standards of accuracy, formatting and turnaround under deal timelines]]></column>
+            <column name="requirements"><![CDATA[• Bachelor’s degree in finance, economics, accounting, engineering or a related quantitative field
+• 0–3 years of experience in investment banking, corporate finance, PE/VC or Big Four transaction services
+• Strong Excel modelling and PowerPoint skills; prior IB internship experience preferred
+• Excellent written and verbal communication in English
+• Ability to work long hours during live processes with composure and precision
+• Interest in cross-border M&A and Asia–US corporate activity
+• Mandarin language ability is a plus but not required]]></column>
+            <column name="benefits"><![CDATA[• Competitive New York analyst compensation with performance bonus
+• Medical, dental and vision benefits
+• Structured training and mentorship from senior deal teams
+• Exposure to cross-border mandates with Asia Pacific connectivity
+• Visa sponsorship considered for exceptional candidates
+• Modern Manhattan office with hybrid flexibility where deal calendars allow]]></column>
+        </insert>
+
+        <insert tableName="jobs">
+            <column name="id" value="66666666-6666-6666-6666-666666666005"/>
+            <column name="title" value="M&amp;A Market Development Associate"/>
+            <column name="department" value="Investment Banking"/>
+            <column name="location" value="New York, United States"/>
+            <column name="type" value="FULL_TIME"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="slug" value="ma-market-development-associate"/>
+            <column name="date_posted" valueDate="2026-05-10"/>
+            <column name="experience" value="3–7 years"/>
+            <column name="education" value="Bachelor's required; MBA a plus"/>
+            <column name="meta_title" value="M&amp;A Market Development Associate · New York · IMan Investment"/>
+            <column name="meta_description" value="Drive M&amp;A origination and market development across US and Asia Pacific corridors."/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="description"><![CDATA[We are hiring an M&A Market Development Associate in New York to originate and advance cross-border advisory relationships. You will identify strategic buyers and sellers, cultivate coverage relationships and support live M&A processes spanning technology, healthcare, industrial and financial services themes.
+
+This is a client-facing role for someone who can combine market judgement with disciplined deal support — equally comfortable in founder conversations, corporate development meetings and internal deal strategy sessions.]]></column>
+            <column name="responsibilities"><![CDATA[• Build and execute sector coverage plans for priority M&A themes and geographic corridors
+• Originate conversations with founders, sponsors and corporate development teams
+• Develop buyer lists, strategic rationale memos and outreach sequences for active sell-side / buy-side processes
+• Partner with Analysts and Vice Presidents on pitches, teasers and process materials
+• Track pipeline quality, conversion metrics and relationship follow-ups in the CRM
+• Coordinate with Hong Kong coverage teams on Asia-linked targets, buyers and capital partners
+• Represent IMan at selected industry events and closed-door networking forums]]></column>
+            <column name="requirements"><![CDATA[• 3–7 years in investment banking M&A, corporate development, PE business development or related origination roles
+• Demonstrated success building relationships and advancing live transaction dialogues
+• Strong commercial writing and presentation skills
+• Working knowledge of M&A process mechanics (valuation, diligence, auction dynamics)
+• Self-starter who can manage a pipeline with limited supervision
+• Bachelor’s degree required; MBA or CFA a plus
+• Experience with US–Asia cross-border activity strongly preferred]]></column>
+            <column name="benefits"><![CDATA[• Competitive base salary plus origination / performance bonus
+• Comprehensive US benefits package
+• Direct partnership with senior bankers on coverage strategy
+• Cross-border travel opportunities between New York and Asia Pacific hubs
+• Professional development and industry membership support
+• Hybrid New York working arrangements outside peak deal periods]]></column>
+        </insert>
+
+        <insert tableName="jobs">
+            <column name="id" value="66666666-6666-6666-6666-666666666006"/>
+            <column name="title" value="Investment Banking Legal Counsel — Due Diligence"/>
+            <column name="department" value="Legal"/>
+            <column name="location" value="New York, United States"/>
+            <column name="type" value="FULL_TIME"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="slug" value="ib-legal-counsel-due-diligence"/>
+            <column name="date_posted" valueDate="2026-05-20"/>
+            <column name="experience" value="4–8 years"/>
+            <column name="education" value="JD / LL.B. required"/>
+            <column name="meta_title" value="IB Legal Counsel — Due Diligence · New York · IMan Investment"/>
+            <column name="meta_description" value="Lead transaction legal diligence and documentation support for IMan’s investment banking mandates."/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="description"><![CDATA[IMan Investment is seeking an Investment Banking Legal Counsel focused on due diligence to support M&A and financing mandates from our New York platform. You will lead legal workstreams across NDAs, diligence issue lists, disclosure schedules and coordination with external counsel — helping deal teams move from first contact to signing with controlled legal risk.
+
+The ideal candidate combines transactional legal training with a practical, deal-oriented mindset and comfort in fast-moving cross-border processes.]]></column>
+            <column name="responsibilities"><![CDATA[• Own legal due diligence workstreams for sell-side and buy-side M&A mandates
+• Draft, review and negotiate NDAs, engagement letters, exclusivity agreements and process letters
+• Build diligence request lists, track issue logs and escalate material findings to deal leadership
+• Coordinate with external counsel on SPA/APA markups, disclosure schedules and closing checklists
+• Advise bankers on regulatory, corporate governance, IP, employment and litigation risk themes at a practical level
+• Support KYC, conflicts checks and internal compliance documentation for live deals
+• Partner with Hong Kong legal and banking colleagues on cross-border transaction structuring questions
+• Maintain playbooks and templates that improve diligence quality and turnaround time]]></column>
+            <column name="requirements"><![CDATA[• JD, LL.B. or equivalent law degree; admission in New York or another major US jurisdiction preferred
+• 4–8 years of experience in a law firm M&A / corporate practice and/or in-house transactional legal role
+• Hands-on experience running legal diligence and reviewing acquisition documentation
+• Clear communicator who can translate legal risk into actionable guidance for bankers and clients
+• High ownership, calm under deadline pressure and strong document discipline
+• Exposure to cross-border US–Asia deals is a significant advantage
+• Mandarin language ability is a plus]]></column>
+            <column name="benefits"><![CDATA[• Competitive counsel-level compensation and bonus
+• Medical, dental, vision and retirement benefits
+• Opportunity to shape legal operating standards for a growing cross-border platform
+• Collaboration with top external counsel and senior deal teams
+• Professional membership and CLE support
+• Hybrid New York schedule where deal timelines permit]]></column>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

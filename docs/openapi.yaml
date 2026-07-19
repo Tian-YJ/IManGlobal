@@ -1351,7 +1351,7 @@ components:
     ContentStatus: { type: string, enum: [DRAFT, PUBLISHED, ARCHIVED] }
     BusinessPlanStatus: { type: string, enum: [DRAFT, SUBMITTED, REVIEWING, APPROVED, REJECTED, ARCHIVED] }
     ApplicantStatus: { type: string, enum: [NEW, REVIEWING, INTERVIEW, OFFER, HIRED, REJECTED, WITHDRAWN] }
-    JobStatus: { type: string, enum: [DRAFT, PUBLISHED, CLOSED, ARCHIVED] }
+    JobStatus: { type: string, enum: [DRAFT, SCHEDULED, PUBLISHED, CLOSED, ARCHIVED] }
     JobType: { type: string, enum: [FULL_TIME, PART_TIME, CONTRACT, INTERNSHIP, TEMPORARY] }
     MediaType: { type: string, enum: [IMAGE, DOCUMENT, VIDEO, OTHER] }
     AuditAction: { type: string, enum: [CREATE, UPDATE, DELETE, LOGIN, LOGOUT, ASSIGN, STATUS_CHANGE, PUBLISH, ARCHIVE, UPLOAD, DOWNLOAD] }

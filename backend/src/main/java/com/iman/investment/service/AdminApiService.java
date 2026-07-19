@@ -168,7 +168,11 @@ public class AdminApiService {
         e.setBenefits(r.getBenefits()); e.setExperience(r.getExperience()); e.setEducation(r.getEducation());
         e.setSalaryMin(r.getSalaryMin()); e.setSalaryMax(r.getSalaryMax()); e.setMetaTitle(r.getMetaTitle());
         e.setMetaDescription(r.getMetaDescription()); e.setSlug(uniqueSlug(r.getSlug(), r.getTitle(), id));
+        if (r.getDatePosted() != null) e.setDatePosted(r.getDatePosted());
         if (e.getStatus() == JobStatus.PUBLISHED && e.getDatePosted() == null) e.setDatePosted(LocalDate.now());
+        if (e.getStatus() == JobStatus.SCHEDULED && e.getDatePosted() == null) {
+            throw new BadRequestException("Scheduled jobs require a publish date");
+        }
         jobs.save(e); logSave(email, "jobs", "Job", e.getId(), id == null);
         return mapper.job(e);
     }

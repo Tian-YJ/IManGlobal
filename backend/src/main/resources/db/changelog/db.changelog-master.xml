@@ -8,5 +8,13 @@
     <include file="db/changelog/changes/001-initial-schema.xml"/>
     <include file="db/changelog/changes/002-seed-data.xml"/>
     <include file="db/changelog/changes/003-production-constraints.xml"/>
+    <include file="db/changelog/changes/004-content-media.xml"/>
+    <include file="db/changelog/changes/005-portfolio-industries.xml"/>
+    <include file="db/changelog/changes/006-insights-reports.xml"/>
+    <include file="db/changelog/changes/007-careers-jobs.xml"/>
+    <include file="db/changelog/changes/008-investment-manager-job.xml"/>
+    <include file="db/changelog/changes/009-regional-partner-jobs.xml"/>
+    <include file="db/changelog/changes/010-job-publish-queue.xml"/>
+    <include file="db/changelog/changes/011-job-publishing-settings.xml"/>
 
 </databaseChangeLog>

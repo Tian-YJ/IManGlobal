@@ -31,6 +31,7 @@ public class JobDto {
         private String metaTitle;
         private String metaDescription;
         private String slug;
+        private LocalDate datePosted;
     }
 
     @Data

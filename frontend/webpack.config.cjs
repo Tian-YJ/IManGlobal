@@ -1,7 +1,20 @@
+const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+/** Copy `public/` into the build output without adding a dependency. */
+class CopyPublicPlugin {
+  apply(compiler) {
+    const from = path.resolve(__dirname, 'public')
+    const to = compiler.options.output.path
+    compiler.hooks.afterEmit.tap('CopyPublicPlugin', () => {
+      if (!fs.existsSync(from) || !to) return
+      fs.cpSync(from, to, { recursive: true })
+    })
+  }
+}
 
 module.exports = (_, argv) => {
   const production = argv.mode === 'production'
@@ -50,6 +63,7 @@ module.exports = (_, argv) => {
         'process.env.API_URL': JSON.stringify(process.env.API_URL || '/api'),
         'process.env.NODE_ENV': JSON.stringify(production ? 'production' : 'development'),
       }),
+      new CopyPublicPlugin(),
     ],
     optimization: {
       runtimeChunk: 'single',
@@ -67,6 +81,7 @@ module.exports = (_, argv) => {
       host: '0.0.0.0',
       historyApiFallback: true,
       hot: true,
+      static: [{ directory: path.resolve(__dirname, 'public'), publicPath: '/' }],
       proxy: [{ context: ['/api'], target: process.env.API_PROXY_TARGET || 'http://localhost:8080', changeOrigin: true }],
       client: { overlay: true },
     },

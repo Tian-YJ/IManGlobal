@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import {
-  ArrowForward, BarChartOutlined, CreateOutlined, InsightsOutlined, Memory,
-  MonitorHeartOutlined, Pause, PlayArrow, Public, ShoppingBagOutlined, SpaOutlined, VolumeOff, VolumeUp,
+  ArrowForward, BarChartOutlined, CreateOutlined, CurrencyBitcoin, InsightsOutlined, Memory,
+  MonitorHeartOutlined, Pause, PlayArrow, PrecisionManufacturingOutlined, Public, ShoppingBagOutlined, SpaOutlined, VolumeOff, VolumeUp,
 } from '@mui/icons-material'
-import { Box, Button, Card, CardContent, IconButton, Stack, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, IconButton, Skeleton, Stack, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { Eyebrow, Section } from '../../components/common'
+import usePageTitle from '../../hooks/usePageTitle'
+import { getList } from '../../services/api'
 import heroHongKong from '../../assets/images/home/hero-hongkong.jpg'
 import insightsOffice from '../../assets/images/home/insights-office.jpg'
 import portfolioAi from '../../assets/images/home/portfolio-ai.jpg'
@@ -20,17 +23,13 @@ const focus = [
   [<MonitorHeartOutlined key="health" />, 'Healthcare'],
   [<ShoppingBagOutlined key="consumer" />, 'Consumer'],
   [<InsightsOutlined key="fintech" />, 'Fintech'],
+  [<CurrencyBitcoin key="crypto" />, 'Crypto'],
+  [<PrecisionManufacturingOutlined key="physical-ai" />, 'Physical AI'],
   [<Public key="enterprise" />, 'Enterprise'],
   [<SpaOutlined key="sustainability" />, 'Sustainability'],
 ]
 
-const portfolio = [
-  ['AI Startup', 'Enterprise AI Platform', portfolioAi],
-  ['HealthTech Co.', 'Digital Healthcare', portfolioHealth],
-  ['Fintech Innovate', 'Next-gen Banking', portfolioFintech],
-  ['Consumer Brand', 'DTC Lifestyle Brand', portfolioConsumer, 'mono'],
-  ['Climate Tech', 'Clean Energy Solution', portfolioClimate],
-]
+const fallbackImages = [portfolioAi, portfolioHealth, portfolioFintech, portfolioConsumer, portfolioClimate]
 
 const features = [
   [<BarChartOutlined key="early" />, 'Early-Stage Focus', 'We invest in pre-seed and seed-stage companies with high growth potential.'],
@@ -76,7 +75,7 @@ function PromoFilm() {
       <video
         ref={videoRef}
         className="promo-film__video"
-        src="/videos/iman-promo.mp4"
+        src="/videos/iman-promo.mp4?v=lumina-20260719"
         poster={heroHongKong}
         autoPlay
         muted
@@ -91,7 +90,7 @@ function PromoFilm() {
         <Typography>
           A short look at the energy of founders, cities and ideas we back — made for the next generation of builders.
         </Typography>
-        <Stack direction="row" gap={1.5} className="promo-film__actions">
+        <Stack direction="row" spacing={1.5} className="promo-film__actions">
           <Button component={Link} to="/submit-business-plan" variant="contained" endIcon={<ArrowForward />}>
             Pitch your company
           </Button>
@@ -108,6 +107,13 @@ function PromoFilm() {
 }
 
 export default function HomePage() {
+  usePageTitle('Home')
+  const portfolioQuery = useQuery({
+    queryKey: ['portfolio', 'featured'],
+    queryFn: () => getList('/public/portfolio', { featured: true }),
+  })
+  const items = (portfolioQuery.data || []).slice(0, 5)
+
   return <Box className="home-page">
     <Box className="home-hero" style={{ '--hero-image': `url(${heroHongKong})` }}>
       <Box className="home-hero__media" role="img" aria-label="Hong Kong Central skyline with IFC and Victoria Peak" />
@@ -116,7 +122,7 @@ export default function HomePage() {
         <Typography className="lead">
           IMan Investment is a Hong Kong-based venture capital firm focused on early-stage investments in innovative companies with global potential.
         </Typography>
-        <Stack direction={{ xs: 'column', sm: 'row' }} gap={2}>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <Button component={Link} to="/submit-business-plan" variant="contained" endIcon={<ArrowForward />}>Submit Business Plan</Button>
           <Button component={Link} to="/portfolio" variant="outlined" endIcon={<ArrowForward />}>Explore Portfolio</Button>
         </Stack>
@@ -149,31 +155,37 @@ export default function HomePage() {
     </Box>
 
     <Section className="home-portfolio">
-      <Stack direction="row" justifyContent="space-between" alignItems="end" mb={4} className="home-section-head">
+      <Stack direction="row" className="home-section-head" sx={{ justifyContent: 'space-between', alignItems: 'flex-end', mb: 4 }}>
         <Typography variant="h3">Featured Portfolio</Typography>
         <Button component={Link} to="/portfolio" endIcon={<ArrowForward />}>View all portfolio</Button>
       </Stack>
-      <Box className="portfolio-grid">
-        {portfolio.map(([name, sector, image, tone]) => (
-          <Card key={name} className="home-portfolio-card">
-            <Box
-              className={`home-portfolio-card__image${tone === 'mono' ? ' home-portfolio-card__image--mono' : ''}`}
-              style={{ backgroundImage: `url(${image})` }}
-            />
-            <CardContent>
-              <Typography variant="h4">{name}</Typography>
-              <Typography color="text.secondary">{sector}</Typography>
-            </CardContent>
-          </Card>
-        ))}
-      </Box>
+      {portfolioQuery.isLoading ? (
+        <Box className="portfolio-grid">{[1, 2, 3, 4, 5].map((n) => <Skeleton key={n} variant="rounded" height={260} />)}</Box>
+      ) : items.length === 0 ? (
+        <Typography color="text.secondary">Featured portfolio companies will appear here soon.</Typography>
+      ) : (
+        <Box className="portfolio-grid">
+          {items.map((item, index) => (
+            <Card key={item.id} className="home-portfolio-card">
+              <Box
+                className="home-portfolio-card__image"
+                style={{ backgroundImage: `url(${item.imageUrl || fallbackImages[index % fallbackImages.length]})` }}
+              />
+              <CardContent>
+                <Typography variant="h4">{item.name}</Typography>
+                <Typography color="text.secondary">{item.industry}</Typography>
+              </CardContent>
+            </Card>
+          ))}
+        </Box>
+      )}
     </Section>
 
     <Section className="insight-band">
       <Box className="split home-insights">
         <Box>
           <Eyebrow>Insights</Eyebrow>
-          <Typography variant="h2" mt={2}>Ideas that move industries forward.</Typography>
+          <Typography variant="h2" sx={{ mt: 2 }}>Ideas that move industries forward.</Typography>
           <Button component={Link} to="/insights" variant="contained" sx={{ mt: 4 }} endIcon={<ArrowForward />}>Explore insights</Button>
         </Box>
         <Box
@@ -187,10 +199,10 @@ export default function HomePage() {
 
     <Section className="home-cta">
       <Typography variant="h2">Let&apos;s build the future together.</Typography>
-      <Typography color="text.secondary" mt={2}>
+      <Typography color="text.secondary" sx={{ mt: 2 }}>
         Partner with IMan Investment to turn bold ideas into enduring companies.
       </Typography>
-      <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="center" gap={2} mt={4}>
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ justifyContent: 'center', mt: 4 }}>
         <Button component={Link} to="/submit-business-plan" variant="contained" endIcon={<ArrowForward />}>Submit Business Plan</Button>
         <Button component={Link} to="/careers" variant="outlined" endIcon={<ArrowForward />}>Explore Careers</Button>
       </Stack>

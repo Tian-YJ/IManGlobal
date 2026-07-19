@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="careers-003-investment-manager-remote" author="iman">
+        <insert tableName="jobs">
+            <column name="id" value="66666666-6666-6666-6666-666666666007"/>
+            <column name="title" value="Investment Manager — Early-Stage US &amp; Global"/>
+            <column name="department" value="Investment"/>
+            <column name="location" value="United States / Global · Remote"/>
+            <column name="type" value="FULL_TIME"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="slug" value="investment-manager-us-global-remote"/>
+            <column name="date_posted" valueDate="2026-05-28"/>
+            <column name="experience" value="4–8 years"/>
+            <column name="education" value="Bachelor's required; MBA a plus"/>
+            <column name="meta_title" value="Investment Manager · US &amp; Global Remote · IMan Investment"/>
+            <column name="meta_description" value="Research early-stage US and global startups and originate equity investment or strategic partnership opportunities — remote-friendly."/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="description"><![CDATA[IMan Investment is hiring an Investment Manager to cover early-stage companies in the United States and selected global markets. You will research founders and markets, assess investment value, and originate equity investment or strategic partnership opportunities that connect ambitious companies with IMan’s capital and Asia Pacific network.
+
+This role is remote-friendly and open to candidates based in the United States or elsewhere globally, with periodic collaboration across Hong Kong and New York time zones.]]></column>
+            <column name="responsibilities"><![CDATA[• Source and research early-stage startups in the US and priority global markets
+• Evaluate investment theses across product, market, team, traction and competitive dynamics
+• Build concise investment memos and opportunity briefs for Partners and the investment committee
+• Identify equity investment opportunities as well as strategic cooperation paths (distribution, corporate partnerships, Asia market entry)
+• Run founder meetings, customer references and commercial diligence workstreams
+• Maintain a high-quality pipeline of companies and map sector themes relevant to IMan’s focus areas
+• Coordinate with Hong Kong and New York colleagues on deal progression and portfolio introductions
+• Represent IMan thoughtfully in remote and in-person founder / ecosystem conversations]]></column>
+            <column name="requirements"><![CDATA[• 4–8 years of experience in venture capital, growth equity, corporate development, startup operating roles or related investing coverage
+• Demonstrated ability to independently research companies and form clear investment views
+• Strong written English and structured analytical skills; financial modelling competence required
+• Comfort engaging US early-stage founders and operators; prior US market exposure preferred
+• Self-directed remote working style with high ownership and reliable communication across time zones
+• Bachelor’s degree required; MBA or equivalent experience a plus
+• Fluency in Mandarin is an advantage for Asia-linked strategic opportunities]]></column>
+            <column name="benefits"><![CDATA[• Competitive compensation with performance-linked bonus
+• Fully remote / hybrid flexibility across US and global locations
+• Direct access to Partners on live opportunities
+• Cross-border exposure spanning US early-stage ecosystems and Asia Pacific networks
+• Learning budget for research tools, conferences and professional development
+• Opportunity to shape IMan’s US and global early-stage coverage map]]></column>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

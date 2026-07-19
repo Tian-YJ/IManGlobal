@@ -263,6 +263,17 @@
   font-size: 12px !important;
 }
 
+.required-mark {
+  color: #c62828;
+  font-weight: 700;
+}
+
+.workflow-form .MuiFormLabel-asterisk,
+.application-form .MuiFormLabel-asterisk,
+.enterprise-form .MuiFormLabel-asterisk {
+  color: #c62828 !important;
+}
+
 .workflow-submit {
   display: flex;
   justify-content: space-between;

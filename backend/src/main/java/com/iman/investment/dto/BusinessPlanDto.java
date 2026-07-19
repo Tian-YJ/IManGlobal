@@ -22,7 +22,7 @@ public class BusinessPlanDto {
         @NotBlank @Email private String founderEmail;
         @NotBlank private String founderPhone;
         @NotBlank private String country;
-        @NotBlank private String linkedinUrl;
+        private String linkedinUrl;
         @NotBlank private String website;
         @NotBlank private String companyName;
         @NotBlank private String industry;

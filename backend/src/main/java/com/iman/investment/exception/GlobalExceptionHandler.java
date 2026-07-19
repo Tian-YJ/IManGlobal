@@ -9,8 +9,10 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -44,6 +46,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({HttpMessageNotReadableException.class, DataIntegrityViolationException.class})
     public ResponseEntity<ErrorResponse> handleInvalidRequest(Exception ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, "The request is invalid or conflicts with existing data", null);
+    }
+
+    @ExceptionHandler({MissingServletRequestPartException.class, MissingServletRequestParameterException.class})
+    public ResponseEntity<ErrorResponse> handleMissingPart(Exception ex) {
+        String message = ex instanceof MissingServletRequestPartException missing
+                ? "Missing required part: " + missing.getRequestPartName()
+                : ex.getMessage();
+        return buildResponse(HttpStatus.BAD_REQUEST, message, null);
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)

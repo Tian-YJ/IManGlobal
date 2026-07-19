@@ -30,7 +30,7 @@ function Header() {
       </Toolbar></Container>
     </AppBar>
     <Drawer anchor="right" open={open} onClose={() => setOpen(false)} PaperProps={{ sx: { width: 'min(88vw, 360px)', p: 3 } }}>
-      <Stack direction="row" justifyContent="space-between"><Brand /><IconButton aria-label="Close navigation" onClick={() => setOpen(false)}><Close /></IconButton></Stack>
+      <Stack direction="row" sx={{ justifyContent: 'space-between' }}><Brand /><IconButton aria-label="Close navigation" onClick={() => setOpen(false)}><Close /></IconButton></Stack>
       <List sx={{ my: 4 }}>{publicNav.map(([label, to]) => <ListItemButton key={to} component={Link} to={to} onClick={() => setOpen(false)}><ListItemText primary={label} primaryTypographyProps={{ variant: 'h5', fontFamily: 'serif' }} /></ListItemButton>)}</List>
       <Button component={Link} to="/submit-business-plan" onClick={() => setOpen(false)} variant="contained">Submit a business plan</Button>
     </Drawer>
@@ -40,11 +40,11 @@ function Header() {
 function Footer() {
   return <Box component="footer" className="site-footer">
     <Container maxWidth="xl"><Box className="footer-grid">
-      <Box><Brand light /><Typography mt={2}>We partner with visionaries building enduring companies across global growth markets.</Typography></Box>
+      <Box><Brand light /><Typography sx={{ mt: 2 }}>We partner with visionaries building enduring companies across global growth markets.</Typography></Box>
       <Box><Typography className="footer-title">Company</Typography>{publicNav.slice(1, 4).map(([label, to]) => <MuiLink key={to} component={Link} to={to}>{label}</MuiLink>)}</Box>
       <Box><Typography className="footer-title">Resources</Typography>{publicNav.slice(4).map(([label, to]) => <MuiLink key={to} component={Link} to={to}>{label}</MuiLink>)}</Box>
       <Box><Typography className="footer-title">Legal</Typography><MuiLink component={Link} to="/privacy">Privacy Policy</MuiLink><MuiLink component={Link} to="/terms">Terms of Use</MuiLink><MuiLink component={Link} to="/admin/login">Admin</MuiLink></Box>
-    </Box><Divider /><Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" gap={2}><Typography variant="caption">© {new Date().getFullYear()} IMan Investment</Typography><MuiLink component={Link} to="/contact" className="footer-cta">Hong Kong <ArrowForward fontSize="inherit" /></MuiLink></Stack></Container>
+    </Box><Divider /><Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ justifyContent: 'space-between' }}><Typography variant="caption">© {new Date().getFullYear()} IMan Investment</Typography><MuiLink component={Link} to="/contact" className="footer-cta">Hong Kong <ArrowForward fontSize="inherit" /></MuiLink></Stack></Container>
   </Box>
 }
 

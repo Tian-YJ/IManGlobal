@@ -48,6 +48,15 @@ iman:
     allowed-origins: ${CORS_ORIGINS:http://localhost:3000,http://localhost:5173}
   upload:
     path: ${UPLOAD_PATH:./uploads}
+  jobs:
+    # Defaults for careers auto-publisher (overridable in Admin → Jobs / Settings)
+    publish-enabled: ${JOB_PUBLISH_ENABLED:true}
+    publish-per-day: ${JOB_PUBLISH_PER_DAY:2}
+    publish-hour: ${JOB_PUBLISH_HOUR:9}
+    publish-cron: ${JOB_PUBLISH_CRON:0 0 * * * *}
+    publish-zone: ${JOB_PUBLISH_ZONE:Asia/Hong_Kong}
+    max-open: ${JOB_MAX_OPEN:6}
+    auto-rotate: ${JOB_AUTO_ROTATE:true}
 
 springdoc:
   api-docs:

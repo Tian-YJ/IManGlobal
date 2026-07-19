@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
+import NotFound from '../../components/NotFound'
 import {
   ApplicantDetailPage, ApplicantsPage, AuditLogsPage, BusinessPlanDetailPage,
   BusinessPlansPage, CmsHubPage, ContactsPage, CrudPage, DashboardPage, MediaPage,
@@ -28,6 +29,6 @@ export default function AdminRoutes() {
     <Route path="audit-logs" element={<AuditLogsPage />} />
     <Route path="settings" element={<SettingsPage />} />
     <Route path="notifications" element={<NotificationsPage />} />
-    <Route path="*" element={<DashboardPage />} />
+    <Route path="*" element={<NotFound homeTo="/admin" homeLabel="Return to dashboard" />} />
   </Routes>
 }

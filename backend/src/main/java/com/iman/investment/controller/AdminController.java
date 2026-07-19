@@ -8,6 +8,7 @@ import com.iman.investment.enums.*;
 import com.iman.investment.service.AdminApiService;
 import com.iman.investment.service.DashboardService;
 import com.iman.investment.service.FileStorageService;
+import com.iman.investment.service.JobPublishingService;
 import com.iman.investment.util.PageUtils;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -34,6 +35,7 @@ public class AdminController {
     private final AdminApiService service;
     private final DashboardService dashboard;
     private final FileStorageService files;
+    private final JobPublishingService jobPublishing;
 
     @GetMapping("/dashboard")
     @PreAuthorize("hasAuthority('dashboard.view')")
@@ -119,6 +121,37 @@ public class AdminController {
     public PageResponse<Map<String, Object>> jobs(PageQuery q, @RequestParam(required = false) String search,
                                                   @RequestParam(required = false) JobStatus status) {
         return PageResponse.from(service.jobList(q.pageable(), search, status));
+    }
+
+    @GetMapping("/jobs/publishing")
+    @PreAuthorize("hasAuthority('jobs.manage')")
+    public Map<String, Object> jobPublishingStatus() {
+        return jobPublishing.status();
+    }
+
+    @PutMapping("/jobs/publishing")
+    @PreAuthorize("hasAuthority('jobs.manage')")
+    public Map<String, Object> updateJobPublishing(@Valid @RequestBody AdminRequests.JobPublishingConfig body, Authentication auth) {
+        var current = jobPublishing.loadConfig();
+        jobPublishing.saveConfig(
+                body.enabled() != null ? body.enabled() : current.enabled(),
+                body.publishPerDay() != null ? body.publishPerDay() : current.publishPerDay(),
+                body.maxOpen() != null ? body.maxOpen() : current.maxOpen(),
+                body.autoRotate() != null ? body.autoRotate() : current.autoRotate(),
+                body.publishZone() != null ? body.publishZone() : current.publishZone(),
+                body.publishHour() != null ? body.publishHour() : current.publishHour(),
+                auth.getName()
+        );
+        return jobPublishing.status();
+    }
+
+    @PostMapping("/jobs/publishing/run")
+    @PreAuthorize("hasAuthority('jobs.manage')")
+    public Map<String, Object> runJobPublishing(@RequestParam(defaultValue = "true") boolean force) {
+        int published = jobPublishing.publishDueJobs(force);
+        Map<String, Object> status = jobPublishing.status();
+        status.put("publishedNow", published);
+        return status;
     }
 
     @GetMapping("/jobs/{id}")

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="insights-001-professional-reports" author="iman">
+        <update tableName="insights">
+            <column name="title" value="Enterprise AI: From Pilot to Production"/>
+            <column name="excerpt" value="A practical framework for investing in enterprise AI companies that convert model capability into durable customer value."/>
+            <column name="image_url" value="/images/insight-cover-ai.jpg"/>
+            <column name="author" value="David Chen · IMan Investment"/>
+            <column name="content"><![CDATA[IMan Perspectives · Report 01
+Enterprise AI: From Pilot to Production
+January 2026
+
+Executive summary
+Enterprise AI has moved past novelty. Buyers no longer ask whether models can generate content or summarise documents — they ask whether software can sit inside regulated workflows, improve unit economics, and survive production scrutiny. For early-stage investors, the opportunity is still large, but selection criteria must become more precise.
+
+At IMan Investment, we partner with founders who treat AI as infrastructure: measurable, reliable and embedded in outcomes customers already pay for. This note outlines the patterns we see across Asia Pacific deal flow and the diligence questions that separate durable platforms from slide-deck narratives.
+
+1. Where value is concentrating
+Three layers are attracting serious enterprise budgets:
+
+• Workflow systems that replace fragmented tools with an AI-native operating layer
+• Vertical applications with proprietary data loops in healthcare, finance, logistics and industrial operations
+• Evaluation, security and governance layers that make AI deployable inside banks, hospitals and government buyers
+
+Horizontal “chat wrappers” without distribution or data advantage are increasingly difficult to defend. The winners combine model orchestration with deep domain context and a clear path to recurring revenue.
+
+2. Diligence questions that matter
+We focus less on benchmark scores and more on operating reality:
+
+• Who is the economic buyer, and what budget line funds expansion?
+• How does the product improve measurable outcomes within 90 days of deployment?
+• What data assets compound with usage, and how defensible is that loop?
+• Can the company ship under enterprise security, audit and latency constraints?
+• Is gross margin resilient as model costs and competitor features shift?
+
+Teams that answer these clearly tend to raise cleaner rounds and retain pricing power.
+
+3. What we look for in founders
+The strongest enterprise AI founders combine technical depth with commercial discipline. They know when to build, when to buy model capacity, and when to refuse vanity metrics. They hire operators who can navigate procurement, not only product demos. In Asia Pacific markets, bilingual go-to-market fluency and trust with regulated buyers are often as important as model architecture.
+
+4. IMan’s investment posture
+We remain selective. Capital is patient; engagement is hands-on. We favour companies that can demonstrate early proof in one high-value workflow, then expand laterally with a repeatable playbook. Our portfolio support centres on customer introductions, hiring for enterprise sales, and governance that prepares companies for institutional capital.
+
+Closing view
+The next decade of enterprise software will reward builders who turn intelligence into operational reliability. For investors, the edge is not predicting which model wins — it is identifying teams who can industrialise AI inside the institutions that move the real economy.
+
+— IMan Investment | Hong Kong]]></column>
+            <where>id = '77777777-7777-7777-7777-777777777001'</where>
+        </update>
+
+        <update tableName="insights">
+            <column name="title" value="Asia Pacific VC Landscape 2026"/>
+            <column name="excerpt" value="Capital concentration, cross-border formation and sector theses shaping early-stage venture across Hong Kong, Singapore and Greater China."/>
+            <column name="image_url" value="/images/insight-cover-apac.jpg"/>
+            <column name="author" value="Sarah Wong · IMan Investment"/>
+            <column name="content"><![CDATA[IMan Perspectives · Report 02
+Asia Pacific VC Landscape 2026
+February 2026
+
+Executive summary
+Asia Pacific venture capital is consolidating around fewer, higher-conviction themes while remaining structurally important for founders who can operate across borders. Hong Kong continues to function as a capital and governance bridge; Singapore as a regional scale hub; and mainland China as a deep market for product iteration and talent. This report summarises the landscape signals guiding IMan Investment’s early-stage mandate in 2026.
+
+1. Capital is more selective — not absent
+Dry powder remains available for exceptional teams, but follow-on standards have tightened. Investors are prioritising:
+
+• Clear path to Series A within 18–24 months
+• Revenue quality over vanity growth
+• Founders with prior operating or technical depth
+• Businesses that can raise in both local and international formats
+
+For seed and pre-seed companies, narrative alone is insufficient. Evidence of customer pull, regulatory readiness and capital efficiency now separates fundable companies from exploratory projects.
+
+2. Sector concentration
+Deal flow we see clustering around:
+
+• Enterprise and vertical AI with Asia-specific data advantages
+• Healthcare platforms improving access, diagnostics and care coordination
+• Fintech rails supporting cross-border payments, compliance and SME credit
+• Climate and energy systems with commercial offtake, not only carbon storytelling
+• Crypto and Physical AI infrastructure where institutional buyers are emerging
+
+Consumer marketplaces without structural differentiation face a harder fundraising environment.
+
+3. Cross-border as a competitive advantage
+The most resilient companies design for multi-market reality from day one: incorporation and banking in Hong Kong or Singapore, product and engineering density where talent is deepest, and go-to-market playbooks adapted by jurisdiction. Legal architecture, IP ownership and board composition are no longer back-office details — they are fundraising assets.
+
+4. What differentiates local investors
+Global capital can write large cheques. Local investors who create durable value provide market access, regulatory translation, hiring networks and judgement during periods of uncertainty. IMan’s thesis is that patience and proximity still matter — especially for early-stage companies navigating talent, policy and go-to-market complexity across Asia.
+
+Closing view
+Asia Pacific remains one of the most consequential regions for building globally relevant companies. The winners of this cycle will be founders who combine ambition with operational realism — and partners who stay engaged long enough for that combination to compound.
+
+— IMan Investment | Hong Kong]]></column>
+            <where>id = '77777777-7777-7777-7777-777777777002'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="insights-002-new-reports" author="iman">
+        <insert tableName="insights">
+            <column name="id" value="77777777-7777-7777-7777-777777777003"/>
+            <column name="title" value="Healthcare Platforms: Building for Scale in Asia"/>
+            <column name="slug" value="healthcare-platforms-asia-2026"/>
+            <column name="excerpt" value="How digital health founders can design for trust, regulation and multi-market expansion across Asia Pacific."/>
+            <column name="image_url" value="/images/insight-cover-health.jpg"/>
+            <column name="author" value="Dr. Mei Lin · IMan Investment"/>
+            <column name="published_date" valueDate="2026-03-08"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="content"><![CDATA[IMan Perspectives · Report 03
+Healthcare Platforms: Building for Scale in Asia
+March 2026
+
+Executive summary
+Healthcare remains one of the most consequential — and most difficult — arenas for venture creation in Asia Pacific. Demographics, rising chronic disease and digitisation of care pathways create durable demand. At the same time, regulation, reimbursement fragmentation and trust barriers punish shallow products. This note captures how IMan Investment evaluates early-stage healthcare platforms.
+
+1. Start with a high-friction workflow
+Successful companies rarely begin as “super apps for health.” They start by owning a painful, frequent workflow: referral coordination, diagnostics turnaround, chronic care adherence, hospital operations, or clinician productivity. Depth beats breadth until unit economics are proven.
+
+2. Trust is a product feature
+In healthcare, brand trust compounds slower than consumer software and decays faster when quality slips. We look for teams that invest early in clinical credibility, data governance, audit trails and partnerships with institutions that already hold patient relationships.
+
+3. Regulation as strategy, not obstacle
+Founders who treat licensing, data residency and medical device pathways as second-order tasks often discover them as Series A blockers. The better pattern is to design architecture and go-to-market around the regulatory map of the first two markets, then expand with a repeatable compliance playbook.
+
+4. What we underwrite
+• Clear clinical or operational outcome metrics
+• Credible path to reimbursement or enterprise contract expansion
+• Defensible data or workflow lock-in
+• Leadership that can speak fluently to clinicians, regulators and investors
+• Capital efficiency appropriate to long sales cycles
+
+Closing view
+Asia’s healthcare opportunity is not abstract. It is concrete, regulated and highly local. Investors who understand that reality — and founders who build for it — can create companies that improve care at population scale.
+
+— IMan Investment | Hong Kong]]></column>
+        </insert>
+
+        <insert tableName="insights">
+            <column name="id" value="77777777-7777-7777-7777-777777777004"/>
+            <column name="title" value="Climate &amp; Energy Transition: Investing Beyond Narratives"/>
+            <column name="slug" value="climate-energy-transition-2026"/>
+            <column name="excerpt" value="A diligence lens for climate and energy companies where commercial offtake, not storytelling, drives venture outcomes."/>
+            <column name="image_url" value="/images/insight-cover-climate.jpg"/>
+            <column name="author" value="James Okada · IMan Investment"/>
+            <column name="published_date" valueDate="2026-04-12"/>
+            <column name="status" value="PUBLISHED"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+            <column name="content"><![CDATA[IMan Perspectives · Report 04
+Climate & Energy Transition: Investing Beyond Narratives
+April 2026
+
+Executive summary
+Climate investing has matured from theme to operating discipline. Capital still flows to energy, industrial efficiency and enabling software — but underwriting now privileges companies with real offtake, procurement pathways and margin visibility. This report outlines how IMan Investment approaches early-stage climate and energy transition opportunities across Asia Pacific.
+
+1. Prefer molecules and megawatts with customers
+We distinguish between climate storytelling and climate businesses. The latter can show:
+
+• Identified buyers and procurement cycles
+• Pilot economics that translate into contracted revenue
+• Technology risk that is staged, not open-ended
+• Policy exposure that is understood and hedgeable
+
+Software that improves energy operations, grid flexibility or industrial efficiency can scale elegantly — provided it attaches to budgets that already exist.
+
+2. Hardware and hybrid models need capital realism
+Hardware-heavy climate companies can create category-defining value, but they require capital plans that match manufacturing, certification and deployment timelines. We look for founders who sequence milestones so each round purchases de-risking, not merely runway.
+
+3. Asia-specific advantages
+Asia Pacific combines manufacturing depth, dense urban energy demand and ambitious infrastructure programmes. Cross-border teams that can source, deploy and sell across the region often outcompete single-market peers. Hong Kong remains a useful base for capital formation and international contracting.
+
+4. Diligence checklist
+• Who pays, and why now?
+• What is the marginal abatement or efficiency gain versus incumbent solutions?
+• How sensitive is the model to subsidies, commodity prices or interest rates?
+• Can the company hire operators who have shipped industrial products before?
+• Is the climate impact measurable without creative accounting?
+
+Closing view
+The energy transition will mint enduring companies — and strand many that confuse narrative with demand. Our role is to back builders who can industrialise climate solutions with the same discipline expected of any category-defining enterprise.
+
+— IMan Investment | Hong Kong]]></column>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

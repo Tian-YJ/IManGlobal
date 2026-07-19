@@ -5,7 +5,7 @@ const MotionBox = motion.create(Box)
 const fade = { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, transition: { duration: .5 } }
 
 export function Eyebrow({ children, light = false }) {
-  return <Typography className="eyebrow" color={light ? 'rgba(255,255,255,.72)' : 'secondary.main'}>{children}</Typography>
+  return <Typography className="eyebrow" color={light ? undefined : 'secondary.main'} sx={light ? { color: 'rgba(255,255,255,.72)' } : undefined}>{children}</Typography>
 }
 
 export function Section({ children, dark = false, className = '', sx = {} }) {
@@ -19,8 +19,8 @@ export function PageHero({ eyebrow, title, text, image, compact = false }) {
     <Container maxWidth="xl" className="page-hero__inner">
       <MotionBox {...fade} className="page-hero__copy">
         <Eyebrow>{eyebrow}</Eyebrow>
-        <Typography variant={compact ? 'h2' : 'h1'} mt={2}>{title}</Typography>
-        {text && <Typography className="lead" mt={3}>{text}</Typography>}
+        <Typography variant={compact ? 'h2' : 'h1'} sx={{ mt: 2 }}>{title}</Typography>
+        {text && <Typography className="lead" sx={{ mt: 3 }}>{text}</Typography>}
       </MotionBox>
     </Container>
   </Box>

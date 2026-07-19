@@ -66,7 +66,7 @@ public class PublicController {
     @Operation(summary = "Apply to a published job")
     public Map<String, Object> apply(@PathVariable UUID jobId,
                                      @Valid @RequestPart("application") ApplicantDto.Request application,
-                                     @RequestPart("resume") MultipartFile resume,
+                                     @RequestPart(value = "resume", required = false) MultipartFile resume,
                                      @RequestPart(value = "coverLetter", required = false) MultipartFile coverLetter) {
         return service.apply(jobId, application, resume, coverLetter);
     }

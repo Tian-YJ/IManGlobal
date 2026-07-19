@@ -35,4 +35,7 @@ public final class AdminRequests {
     public record Notification(@NotNull UUID userId, @NotBlank @Size(max = 200) String title,
                                @Size(max = 10000) String message, @Size(max = 50) String type,
                                @Size(max = 500) String linkUrl) {}
+    public record JobPublishingConfig(Boolean enabled, Integer publishPerDay, Integer maxOpen,
+                                      Boolean autoRotate, @Size(max = 80) String publishZone,
+                                      Integer publishHour) {}
 }

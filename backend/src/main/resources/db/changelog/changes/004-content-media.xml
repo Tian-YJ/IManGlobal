@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="content-001-portfolio-images" author="iman">
+        <update tableName="portfolio_companies">
+            <column name="image_url" value="/images/portfolio-ai.jpg"/>
+            <column name="website" value="https://example.com"/>
+            <where>id = '44444444-4444-4444-4444-444444444001'</where>
+        </update>
+        <update tableName="portfolio_companies">
+            <column name="image_url" value="/images/portfolio-health.jpg"/>
+            <column name="website" value="https://example.com"/>
+            <where>id = '44444444-4444-4444-4444-444444444002'</where>
+        </update>
+        <update tableName="portfolio_companies">
+            <column name="image_url" value="/images/portfolio-fintech.jpg"/>
+            <column name="website" value="https://example.com"/>
+            <where>id = '44444444-4444-4444-4444-444444444003'</where>
+        </update>
+        <update tableName="portfolio_companies">
+            <column name="image_url" value="/images/portfolio-climate.jpg"/>
+            <column name="website" value="https://example.com"/>
+            <where>id = '44444444-4444-4444-4444-444444444004'</where>
+        </update>
+        <update tableName="portfolio_companies">
+            <column name="image_url" value="/images/hero-hongkong.jpg"/>
+            <column name="website" value="https://example.com"/>
+            <where>id = '44444444-4444-4444-4444-444444444005'</where>
+        </update>
+        <update tableName="portfolio_companies">
+            <column name="image_url" value="/images/portfolio-consumer.jpg"/>
+            <column name="website" value="https://example.com"/>
+            <where>id = '44444444-4444-4444-4444-444444444006'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="content-002-team-images" author="iman">
+        <update tableName="team_members">
+            <column name="image_url" value="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&amp;fit=crop&amp;w=600&amp;h=750&amp;q=80"/>
+            <column name="linkedin_url" value="https://www.linkedin.com/"/>
+            <where>id = '55555555-5555-5555-5555-555555555001'</where>
+        </update>
+        <update tableName="team_members">
+            <column name="image_url" value="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&amp;fit=crop&amp;w=600&amp;h=750&amp;q=80"/>
+            <column name="linkedin_url" value="https://www.linkedin.com/"/>
+            <where>id = '55555555-5555-5555-5555-555555555002'</where>
+        </update>
+        <update tableName="team_members">
+            <column name="image_url" value="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&amp;fit=crop&amp;w=600&amp;h=750&amp;q=80"/>
+            <column name="linkedin_url" value="https://www.linkedin.com/"/>
+            <where>id = '55555555-5555-5555-5555-555555555003'</where>
+        </update>
+        <update tableName="team_members">
+            <column name="image_url" value="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&amp;fit=crop&amp;w=600&amp;h=750&amp;q=80"/>
+            <column name="linkedin_url" value="https://www.linkedin.com/"/>
+            <where>id = '55555555-5555-5555-5555-555555555004'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="content-003-insight-images" author="iman">
+        <update tableName="insights">
+            <column name="image_url" value="/images/portfolio-ai.jpg"/>
+            <column name="content" value="Artificial intelligence continues to reshape how enterprises operate, from workflow automation to decision support.
+
+At IMan Investment, we partner with founders who treat AI as infrastructure — reliable, measurable and embedded in real customer outcomes — rather than as a slide-deck narrative.
+
+We look for teams that understand data moats, distribution in regulated markets, and the operating discipline required to ship enterprise-grade products. The next decade of software will reward builders who combine technical depth with clear commercial focus."/>
+            <where>id = '77777777-7777-7777-7777-777777777001'</where>
+        </update>
+        <update tableName="insights">
+            <column name="image_url" value="/images/insights-office.jpg"/>
+            <column name="content" value="The Asia Pacific venture capital landscape is evolving rapidly as founders build for regional scale with global ambition.
+
+Capital is concentrating around AI infrastructure, healthcare platforms, fintech rails and climate solutions. Cross-border teams that can operate between Hong Kong, Singapore and mainland China are increasingly well positioned.
+
+Our view: patience, local insight and hands-on partnership remain the differentiators — especially for early-stage companies navigating regulation, talent and go-to-market complexity."/>
+            <where>id = '77777777-7777-7777-7777-777777777002'</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="content-004-legal-pages" author="iman">
+        <update tableName="cms_pages">
+            <column name="content" value="Privacy Policy
+
+Last updated: 1 January 2026
+
+IMan Investment (“we”, “us”) respects your privacy and is committed to protecting personal data you share with us through this website and related forms.
+
+1. Information we collect
+We may collect contact details, company information and documents you submit through business plan applications, job applications and the contact form. We also collect limited technical data such as IP address and browser type for security and analytics.
+
+2. How we use information
+We use your information to evaluate investment opportunities, recruit candidates, respond to enquiries and improve our services. We do not sell personal data.
+
+3. Sharing
+We may share information with service providers who support our operations under confidentiality obligations, or when required by law.
+
+4. Retention
+We retain personal data only as long as needed for the purposes above, or as required by applicable law.
+
+5. Your rights
+Subject to applicable law, you may request access, correction or deletion of your personal data by contacting us at privacy@imaninvestment.com.
+
+6. Contact
+IMan Investment, Hong Kong. For privacy questions, email privacy@imaninvestment.com."/>
+            <column name="updated_at" valueComputed="NOW()"/>
+            <where>slug = 'privacy-policy'</where>
+        </update>
+        <update tableName="cms_pages">
+            <column name="content" value="Terms of Use
+
+Last updated: 1 January 2026
+
+By accessing the IMan Investment website, you agree to these Terms of Use.
+
+1. Informational purpose
+Content on this website is provided for general information only and does not constitute investment advice, an offer to sell, or a solicitation to buy any securities.
+
+2. Submissions
+Business plans, applications and other materials you submit are evaluated at our discretion. Submission does not create any obligation for us to invest, hire or respond within a particular timeframe.
+
+3. Intellectual property
+Website design, branding and original content are owned by IMan Investment or its licensors. You may not copy or redistribute materials without prior written consent.
+
+4. Acceptable use
+You agree not to misuse the site, attempt unauthorized access, or submit unlawful, misleading or infringing content.
+
+5. Disclaimer
+The site is provided “as is”. To the fullest extent permitted by law, we disclaim warranties and limit liability for losses arising from use of the site.
+
+6. Governing law
+These terms are governed by the laws of Hong Kong. If you do not agree, please discontinue use of the site.
+
+7. Contact
+For questions about these terms, contact legal@imaninvestment.com."/>
+            <column name="updated_at" valueComputed="NOW()"/>
+            <where>slug = 'terms-of-use'</where>
+        </update>
+    </changeSet>
+
+</databaseChangeLog>

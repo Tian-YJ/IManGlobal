@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="careers-007-publishing-settings" author="iman">
+        <insert tableName="settings">
+            <column name="id" value="99999999-9999-9999-9999-999999999011"/>
+            <column name="setting_key" value="jobs.publish_enabled"/>
+            <column name="setting_value" value="true"/>
+            <column name="description" value="Enable automatic daily job publishing"/>
+            <column name="category" value="careers"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="settings">
+            <column name="id" value="99999999-9999-9999-9999-999999999012"/>
+            <column name="setting_key" value="jobs.publish_per_day"/>
+            <column name="setting_value" value="2"/>
+            <column name="description" value="Maximum roles to auto-publish each day"/>
+            <column name="category" value="careers"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="settings">
+            <column name="id" value="99999999-9999-9999-9999-999999999013"/>
+            <column name="setting_key" value="jobs.max_open"/>
+            <column name="setting_value" value="6"/>
+            <column name="description" value="Maximum publicly open roles before oldest are closed"/>
+            <column name="category" value="careers"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="settings">
+            <column name="id" value="99999999-9999-9999-9999-999999999014"/>
+            <column name="setting_key" value="jobs.auto_rotate"/>
+            <column name="setting_value" value="true"/>
+            <column name="description" value="Auto-close oldest roles when over max open"/>
+            <column name="category" value="careers"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="settings">
+            <column name="id" value="99999999-9999-9999-9999-999999999015"/>
+            <column name="setting_key" value="jobs.publish_zone"/>
+            <column name="setting_value" value="Asia/Hong_Kong"/>
+            <column name="description" value="Timezone used for daily publishing"/>
+            <column name="category" value="careers"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="settings">
+            <column name="id" value="99999999-9999-9999-9999-999999999016"/>
+            <column name="setting_key" value="jobs.publish_hour"/>
+            <column name="setting_value" value="9"/>
+            <column name="description" value="Local hour (0-23) when the daily publisher may run"/>
+            <column name="category" value="careers"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
