@@ -23,6 +23,17 @@ managed database, adapt `DB_URL`, `DB_USERNAME`, and `DB_PASSWORD` through an
 environment-specific Compose override and require encrypted transport (for example,
 the provider's required JDBC SSL parameters).
 
+## Go-live checklist (Tencent Cloud / single host)
+
+1. **DNS & TLS** — point the public domain to the host / CLB; terminate HTTPS (Nginx, Caddy, or cloud cert).
+2. **Secrets** — copy `deployment/.env.production.example` to a host path with `chmod 600`; set unique `POSTGRES_PASSWORD`, `JWT_SECRET`, `ADMIN_INITIAL_PASSWORD`, and exact `CORS_ORIGINS` (e.g. `https://your-domain.com`).
+3. **Build & start** — from repo root, either:
+   - registry images: set `BACKEND_IMAGE` / `FRONTEND_IMAGE` then `pull` + `up -d --no-build`, or
+   - first host build: `docker compose --env-file … -f deployment/compose.production.yml up -d --build`
+4. **Migrate** — Liquibase runs on backend start (includes portfolio, insights, careers seed, job publish queue). Watch logs once.
+5. **Smoke** — `curl` `/healthz` and `/api/v3/api-docs`; open home, portfolio, insights, careers; submit a test BP; admin login and change the initial password immediately.
+6. **Ops** — confirm uploads volume persistence, disk alerts, DB backup script schedule (`database/`), and that careers auto-publish settings look correct under Admin → Jobs.
+
 ## Initial deployment
 
 From the repository root:
